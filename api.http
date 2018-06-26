@@ -1,0 +1,82 @@
+@host = http://localhost:8000
+@apiPrefix = api
+
+GET {{host}}/{{apiPrefix}}/posts
+
+###
+
+GET {{host}}/{{apiPrefix}}/posts/7
+
+###
+
+POST {{host}}/{{apiPrefix}}/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ilx1MDAwMyIsImVtYWlsIjoiZGVyaWMuY2FpbjJAZ21haWwuY29tIiwiZXhwIjoxNTMwNDg5NDc4LCJpc3MiOiJoYWNrZXJsb2cuaW8ifQ.n-vHBRrnL8i8OW5FhhPenGO2WXZu4KBnUeZhk78vi_g
+
+{
+  "title": "Something a little different",
+  "body": "This is the best body ever this is too and that is the truth",
+  "excerpt": "This is a little teaser..."
+}
+
+###
+
+PUT {{host}}/{{apiPrefix}}/posts/2
+
+{
+  "title": "The baby was over the hype of it all",
+  "body": "Lorem ipsum dolor sit amet consectetur adipiscing elit imperdiet erat tempus dui",
+  "excerpt": "Lorem ipsum dolor"
+}
+
+###
+
+DELETE {{host}}/{{apiPrefix}}/posts/1
+
+###
+
+GET {{host}}/{{apiPrefix}}/users
+
+###
+
+GET {{host}}/{{apiPrefix}}/users/7
+
+###
+
+POST {{host}}/{{apiPrefix}}/users
+
+{
+  "email": "deric.cain2@gmail.com",
+  "name": "Deric Cain",
+  "password": "password"
+}
+
+###
+
+PUT {{host}}/{{apiPrefix}}/users/2
+
+{
+  "title": "The baby was over the hype of it all",
+  "body": "Lorem ipsum dolor sit amet consectetur adipiscing elit imperdiet erat tempus dui",
+  "excerpt": "Lorem ipsum dolor"
+}
+
+###
+
+DELETE {{host}}/{{apiPrefix}}/users/1
+
+###
+
+POST {{host}}/{{apiPrefix}}/auth/login
+
+{
+  "email": "deric.cain2@gmail.com",
+  "password": "password"
+}
+
+###
+
+POST {{host}}/{{apiPrefix}}/api/does-not-exists
+
+{
+  "nothing": true
+}
