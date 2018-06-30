@@ -19,9 +19,9 @@ import (
 var env = os.Getenv("APP_ENV")
 
 func migrate(db *gorm.DB) {
-	db.AutoMigrate(&users.User{})
-	db.AutoMigrate(&auth.Auth{})
 	db.AutoMigrate(&units.Unit{})
+	db.AutoMigrate(&auth.Auth{})
+	db.AutoMigrate(&users.User{})
 	log.Debug("Migrated DB")
 }
 

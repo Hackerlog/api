@@ -24,10 +24,11 @@ func Routes(r *gin.RouterGroup) {
 // Find Finds the first user by their id or by their editor_id
 func Find(c *gin.Context) {
 	var user User
+
 	db := common.GetDb()
 	id := c.Param("id")
 
-	if err := db.Where("id = ?", id).First(&user).Error; err != nil {
+	if err := db.Preload("Units").Where("id = ?", id).First(&user).Error; err != nil {
 		c.AbortWithError(http.StatusNotFound, err)
 	} else {
 		c.JSON(http.StatusOK, &user)

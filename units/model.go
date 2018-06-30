@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/gorm/dialects/postgres"
 )
 
+// Unit This stuff
 type Unit struct {
 	ID              uint           `json:"id" gorm:"primary_key"`
 	UserID          uint           `json:"user_id"`

@@ -17,7 +17,7 @@ type User struct {
 	Password           string       `json:"-" binding:"required"`
 	EditorToken        string       `json:"editor_token" gorm:"index"`
 	PasswordResetToken string       `json:"-"`
-	Units              []units.Unit `gorm:"foreignKey:user_id_units"`
+	Units              []units.Unit `json:"units"`
 	CreatedAt          time.Time    `json:"created_at"`
 	UpdatedAt          time.Time    `json:"updated_at"`
 	DeletedAt          *time.Time   `json:"-" sql:"index"`
