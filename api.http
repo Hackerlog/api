@@ -1,5 +1,5 @@
 @host = http://localhost:8000
-@apiPrefix = api
+@apiPrefix = v1
 
 GET {{host}}/{{apiPrefix}}/posts
 
@@ -38,14 +38,18 @@ GET {{host}}/{{apiPrefix}}/users
 
 ###
 
-GET {{host}}/{{apiPrefix}}/users/7
+GET {{host}}/{{apiPrefix}}/users/1
+
+###
+
+GET {{host}}/{{apiPrefix}}/users/41dc247f-df46-4885-8c18-400f011894c9
 
 ###
 
 POST {{host}}/{{apiPrefix}}/users
 
 {
-  "email": "deric.cain2@gmail.com",
+  "email": "deric.cain1@gmail.com",
   "name": "Deric Cain",
   "password": "password"
 }

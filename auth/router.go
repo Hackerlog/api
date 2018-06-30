@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/dericgw/blog-api/common"
-	"github.com/dericgw/blog-api/users"
 	"github.com/gin-gonic/gin"
+	"github.com/hackerlog/api/common"
+	"github.com/hackerlog/api/users"
 )
 
 // Routes Register the routes

@@ -2,17 +2,25 @@ package users
 
 import (
 	"errors"
+	"time"
 
-	"github.com/dericgw/blog-api/common"
-	"github.com/jinzhu/gorm"
+	"github.com/hackerlog/api/common"
+	"github.com/hackerlog/api/units"
+	"github.com/pborman/uuid"
 )
 
 // User This is the user model that will hold all of the users
 type User struct {
-	gorm.Model
-	Email    string `json:"email" gorm:"type:varchar(100);unique_index" binding:"required"`
-	Name     string `json:"name" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	ID                 uint         `json:"id" gorm:"primary_key"`
+	Email              string       `json:"email" gorm:"type:varchar(100);unique_index" binding:"required"`
+	Name               string       `json:"name" binding:"required"`
+	Password           string       `json:"-" binding:"required"`
+	EditorToken        string       `json:"editor_token" gorm:"index"`
+	PasswordResetToken string       `json:"-"`
+	Units              []units.Unit `gorm:"foreignKey:user_id_units"`
+	CreatedAt          time.Time    `json:"created_at"`
+	UpdatedAt          time.Time    `json:"updated_at"`
+	DeletedAt          *time.Time   `json:"-" sql:"index"`
 }
 
 // BeforeCreate We want to hash the users password
@@ -24,13 +32,7 @@ func (u *User) BeforeCreate() (err error) {
 	}
 
 	u.Password = hashedPassword
+	u.EditorToken = uuid.New()
 
 	return nil
-}
-
-// Migrate Migrate the users table
-func Migrate() {
-	db := common.GetDb()
-
-	db.AutoMigrate(&User{})
 }

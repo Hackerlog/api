@@ -9,7 +9,7 @@
 
 [[projects]]
   branch = "develop"
-  name = "github.com/dericgw/blog-api"
+  name = "github.com/hackerlog/api"
   packages = [
     "auth",
     "common",
@@ -109,6 +109,12 @@
   version = "1.0.0"
 
 [[projects]]
+  name = "github.com/pborman/uuid"
+  packages = ["."]
+  revision = "e790cca94e6cc75c7064b1332e63811d4aae1a53"
+  version = "v1.1"
+
+[[projects]]
   name = "github.com/pmezard/go-difflib"
   packages = ["difflib"]
   revision = "792786c7400a136282c1664665ae0a8db921c6c2"
@@ -166,6 +172,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7892b28c57fc0772c6b017607dbb5a985f0a0c2a0ebe2eb300353e0e2cca4129"
+  inputs-digest = "1cb8843352619aef12efc29cefd6c52ada94e027beab9ef006b1e8693850997d"
   solver-name = "gps-cdcl"
   solver-version = 1
