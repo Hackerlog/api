@@ -2,4 +2,3 @@ vendor
 server
 .env
 tmp
-docs

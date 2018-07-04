@@ -1,0 +1,68 @@
+basePath: /v1
+definitions:
+  main.Unit:
+    properties:
+      computer_type:
+        type: string
+      created_at:
+        type: string
+      editor_type:
+        type: string
+      file_name:
+        type: string
+      id:
+        example: 1
+        type: integer
+      loc_deleted:
+        type: integer
+      loc_written:
+        type: integer
+      os:
+        type: string
+      project_name:
+        type: string
+      started_at:
+        type: string
+      stopped_at:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        example: 1
+        type: integer
+    type: object
+info:
+  contact:
+    email: deric.cain@gmail.com
+    name: Deric Cain
+    url: https://dericcain.com
+  description: This is the Hackerlog API for collecting editor stats
+  license: {}
+  title: Hackerlog API
+  version: "1.0"
+paths:
+  /units:
+    get:
+      consumes:
+      - application/json
+      description: This gets all of the units of work for a specific user. The user
+        is identified by the
+      parameters:
+      - description: X-Hackerlog-EditorToken
+        in: header
+        name: X-Hackerlog-EditorToken
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.Unit'
+            type: array
+      summary: Gets units of work for a user
+      tags:
+      - units
+swagger: "2.0"

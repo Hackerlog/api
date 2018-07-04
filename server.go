@@ -3,13 +3,13 @@ package main
 import (
 	"os"
 
-	"github.com/jinzhu/gorm"
-
-	"github.com/gin-gonic/gin"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/hackerlog/api/docs"
-	"github.com/joho/godotenv"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	
 	log "github.com/sirupsen/logrus"
+	"github.com/jinzhu/gorm"
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
