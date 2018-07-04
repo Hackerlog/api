@@ -6,22 +6,20 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"github.com/gin-gonic/gin"
-
-	"github.com/hackerlog/api/auth"
-	"github.com/hackerlog/api/common"
-	"github.com/hackerlog/api/units"
-	"github.com/hackerlog/api/users"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/hackerlog/api/docs"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 var env = os.Getenv("APP_ENV")
 
 func migrate(db *gorm.DB) {
-	db.AutoMigrate(&units.Unit{})
-	db.AutoMigrate(&auth.Auth{})
-	db.AutoMigrate(&users.User{})
+	db.AutoMigrate(&Unit{})
+	db.AutoMigrate(&Auth{})
+	db.AutoMigrate(&User{})
 	log.Debug("Migrated DB")
 }
 
@@ -52,8 +50,18 @@ func init() {
 	}
 }
 
+// @BasePath /v1
+// @title Hackerlog API
+// @version 1.0
+// @description This is the Hackerlog API for collecting editor stats
+
+// @contact.name Deric Cain
+// @contact.url https://dericcain.com
+// @contact.email deric.cain@gmail.com
+
+// @BasePath /v1
 func main() {
-	db := common.Init()
+	db := DbInit()
 	defer db.Close()
 
 	migrate(db)
@@ -62,9 +70,12 @@ func main() {
 
 	v1 := r.Group("/v1")
 
-	auth.Routes(v1.Group("/auth"))
-	users.Routes(v1.Group("/users"))
-	units.Routes(v1.Group("/units"))
+	AuthRoutes(v1.Group("/auth"))
+	UserRoutes(v1.Group("/users"))
+	UnitRoutes(v1.Group("/units"))
+
+	// Setup Swagger docs
+	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run(getPort())
 }
