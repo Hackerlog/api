@@ -1,6 +1,10 @@
 [metadata.heroku]
   root-package = "github.com/hackerlog/api"
 
+[prune]
+  go-tests = true
+  unused-packages = true
+
 [[constraint]]
   name = "github.com/gin-gonic/gin"
   branch = "master"
@@ -8,10 +12,6 @@
 [[constraint]]
   name = "github.com/jinzhu/gorm"
   version = "1.9.1"
-
-[prune]
-  go-tests = true
-  unused-packages = true
 
 [[constraint]]
   branch = "master"
