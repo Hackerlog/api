@@ -20,15 +20,6 @@
   version = "v1.1.0"
 
 [[projects]]
-  branch = "develop"
-  name = "github.com/dericgw/blog-api"
-  packages = [
-    "common",
-    "users"
-  ]
-  revision = "f455713ec8c63706eb2826509535700505325f98"
-
-[[projects]]
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
   revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
@@ -265,6 +256,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "285d4d7cc7c2a34be316c3c223ae842a9456b7b2021d848ea3163a0ef1a645f1"
+  inputs-digest = "43c72e1c349df386e1b385b875fc29c09c5b2dcee85860db50a78884ed75a71d"
   solver-name = "gps-cdcl"
   solver-version = 1

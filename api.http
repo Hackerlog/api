@@ -1,4 +1,4 @@
-@host = http://localhost:8000
+@host = http://localhost:8080
 @apiPrefix = v1
 
 GET {{host}}/{{apiPrefix}}/posts

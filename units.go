@@ -11,20 +11,19 @@ var xHeader = "X-Hackerlog-EditorToken"
 
 // Unit This represents a file that has been edited, or, a "unit" of work
 type Unit struct {
-	ID           uint       `json:"id" gorm:"primary_key"`
-	UserID       uint       `json:"user_id" gorm:"index"`
-	EditorType   string     `json:"editor_type"`
-	ProjectName  string     `json:"project_name"`
-	FileName     string     `json:"file_name"`
-	LocWritten   int        `json:"loc_written"`
-	LocDeleted   int        `json:"loc_deleted"`
-	ComputerType string     `json:"computer_type"`
-	Os           string     `json:"os"`
-	StartedAt    time.Time  `json:"started_at"`
-	StoppedAt    time.Time  `json:"stopped_at"`
-	CreatedAt    time.Time  `json:"created_at"`
-	UpdatedAt    time.Time  `json:"updated_at"`
-	DeletedAt    *time.Time `json:"-" gorm:"index"`
+	ID          uint       `json:"id" gorm:"primary_key"`
+	UserID      uint       `json:"user_id" gorm:"index"`
+	EditorType  string     `json:"editor_type"`
+	ProjectName string     `json:"project_name"`
+	FileName    string     `json:"file_name"`
+	LocWritten  int        `json:"loc_written"`
+	LocDeleted  int        `json:"loc_deleted"`
+	Os          string     `json:"os"`
+	StartedAt   time.Time  `json:"started_at"`
+	StoppedAt   time.Time  `json:"stopped_at"`
+	CreatedAt   time.Time  `json:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	DeletedAt   *time.Time `json:"-" gorm:"index"`
 }
 
 // UnitRoutes Export the routes for Units
@@ -65,7 +64,7 @@ func createUnit(c *gin.Context) {
 	var unit Unit
 	var user User
 
-	c.Bind(&unit)
+	c.BindJSON(&unit)
 
 	db := GetDb()
 	eToken := c.GetHeader(xHeader)
@@ -78,5 +77,8 @@ func createUnit(c *gin.Context) {
 	unit.UserID = user.ID
 
 	db.Create(&unit)
-	c.JSON(http.StatusCreated, &unit)
+
+	c.JSON(http.StatusCreated, c.JSON{
+		"success": true,
+	})
 }
