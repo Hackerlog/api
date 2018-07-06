@@ -1,14 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-var xHeader = "X-Hackerlog-EditorToken";
+var xHeader = "X-Hackerlog-EditorToken"
 
 // Unit This represents a file that has been edited, or, a "unit" of work
 type Unit struct {
@@ -65,7 +64,7 @@ func getUnit(c *gin.Context) {
 func createUnit(c *gin.Context) {
 	var unit Unit
 	var user User
-	
+
 	c.Bind(&unit)
 
 	db := GetDb()
