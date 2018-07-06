@@ -21,9 +21,9 @@ func DbInit() *gorm.DB {
 	if err != nil {
 		log.Error(err)
 	}
-	if os.Getenv("APP_ENV") == "local" {
-		db.LogMode(true)
-	}
+	// if os.Getenv("APP_ENV") == "local" {
+	// 	db.LogMode(true)
+	// }
 	DB = db
 	return DB
 }

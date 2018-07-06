@@ -1,17 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
-	"github.com/dericgw/blog-api/users"
 	"github.com/gin-gonic/gin"
 )
 
+var xHeader = "X-Hackerlog-EditorToken";
+
 // Unit This represents a file that has been edited, or, a "unit" of work
 type Unit struct {
-	ID           uint       `json:"id" gorm:"primary_key" example:"1"`
-	UserID       uint       `json:"user_id"  gorm:"index" example:"1"`
+	ID           uint       `json:"id" gorm:"primary_key"`
+	UserID       uint       `json:"user_id" gorm:"index"`
 	EditorType   string     `json:"editor_type"`
 	ProjectName  string     `json:"project_name"`
 	FileName     string     `json:"file_name"`
@@ -43,10 +45,10 @@ func UnitRoutes(r *gin.RouterGroup) {
 // @Router /units [get]
 func getUnit(c *gin.Context) {
 	var units []Unit
-	var user users.User
+	var user User
 
 	db := GetDb()
-	eToken := c.GetHeader("X-Hackerlog-EditorToken")
+	eToken := c.GetHeader(xHeader)
 
 	if err := db.Where("editor_token = ?", eToken).First(&user).Error; err != nil {
 		c.AbortWithError(http.StatusUnauthorized, err)
@@ -62,8 +64,19 @@ func getUnit(c *gin.Context) {
 // Create Creates a unit of work for a user
 func createUnit(c *gin.Context) {
 	var unit Unit
+	var user User
+	
+	c.Bind(&unit)
+
 	db := GetDb()
-	c.BindJSON(&unit)
+	eToken := c.GetHeader(xHeader)
+
+	if err := db.Where("editor_token = ?", eToken).First(&user).Error; err != nil {
+		c.AbortWithError(http.StatusUnauthorized, err)
+		return
+	}
+
+	unit.UserID = user.ID
 
 	db.Create(&unit)
 	c.JSON(http.StatusCreated, &unit)

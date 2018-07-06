@@ -9,28 +9,20 @@ GET {{host}}/{{apiPrefix}}/posts/7
 
 ###
 
-POST {{host}}/{{apiPrefix}}/posts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ilx1MDAwMyIsImVtYWlsIjoiZGVyaWMuY2FpbjJAZ21haWwuY29tIiwiZXhwIjoxNTMwNDg5NDc4LCJpc3MiOiJoYWNrZXJsb2cuaW8ifQ.n-vHBRrnL8i8OW5FhhPenGO2WXZu4KBnUeZhk78vi_g
+POST {{host}}/{{apiPrefix}}/units
+X-Hackerlog-EditorToken: c918791b-13b8-46d0-ad8f-2b76fbc03ca8
 
 {
-  "title": "Something a little different",
-  "body": "This is the best body ever this is too and that is the truth",
-  "excerpt": "This is a little teaser..."
+  "editor_type": "vscode",
+  "project_name": "web-consumer-app",
+  "file_name": "app.js",
+  "loc_written": "{{$randomInt 20 400}}",
+  "loc_deleted": "{{$randomInt 3 30}}",
+  "computer_type": "macbook pro",
+  "os": "osx",
+  "started_at": "{{$timestamp -52 m}}",
+  "stopped_at": "{{$timestamp}}"
 }
-
-###
-
-PUT {{host}}/{{apiPrefix}}/posts/2
-
-{
-  "title": "The baby was over the hype of it all",
-  "body": "Lorem ipsum dolor sit amet consectetur adipiscing elit imperdiet erat tempus dui",
-  "excerpt": "Lorem ipsum dolor"
-}
-
-###
-
-DELETE {{host}}/{{apiPrefix}}/posts/1
 
 ###
 
