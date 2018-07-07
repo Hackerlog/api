@@ -78,7 +78,7 @@ func createUnit(c *gin.Context) {
 
 	db.Create(&unit)
 
-	c.JSON(http.StatusCreated, c.JSON{
+	c.JSON(http.StatusCreated, gin.H{
 		"success": true,
 	})
 }

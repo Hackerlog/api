@@ -1,13 +1,5 @@
-@host = http://localhost:8080
+@host = http://localhost:8000
 @apiPrefix = v1
-
-GET {{host}}/{{apiPrefix}}/posts
-
-###
-
-GET {{host}}/{{apiPrefix}}/posts/7
-
-###
 
 POST {{host}}/{{apiPrefix}}/units
 X-Hackerlog-EditorToken: c918791b-13b8-46d0-ad8f-2b76fbc03ca8
@@ -23,18 +15,6 @@ X-Hackerlog-EditorToken: c918791b-13b8-46d0-ad8f-2b76fbc03ca8
   "started_at": "{{$timestamp -52 m}}",
   "stopped_at": "{{$timestamp}}"
 }
-
-###
-
-GET {{host}}/{{apiPrefix}}/users
-
-###
-
-GET {{host}}/{{apiPrefix}}/users/1
-
-###
-
-GET {{host}}/{{apiPrefix}}/users/41dc247f-df46-4885-8c18-400f011894c9
 
 ###
 
@@ -58,10 +38,6 @@ PUT {{host}}/{{apiPrefix}}/users/2
 
 ###
 
-DELETE {{host}}/{{apiPrefix}}/users/1
-
-###
-
 POST {{host}}/{{apiPrefix}}/auth/login
 
 {
@@ -69,10 +45,7 @@ POST {{host}}/{{apiPrefix}}/auth/login
   "password": "password"
 }
 
+
 ###
 
-POST {{host}}/{{apiPrefix}}/api/does-not-exists
-
-{
-  "nothing": true
-}
+GET {{host}}/{{apiPrefix}}/core/version

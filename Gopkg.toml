@@ -40,3 +40,11 @@
 [[constraint]]
   branch = "master"
   name = "github.com/swaggo/gin-swagger"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/getsentry/raven-go"
+
+[[constraint]]
+  name = "github.com/evalphobia/logrus_sentry"
+  version = "0.4.6"

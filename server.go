@@ -7,6 +7,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	
 	log "github.com/sirupsen/logrus"
+	raven "github.com/getsentry/raven-go"
+	"github.com/evalphobia/logrus_sentry"
 	"github.com/jinzhu/gorm"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -41,6 +43,27 @@ func init() {
 		log.Debug("Loaded .env file")
 	}
 
+	client, err := raven.New(os.Getenv("SENTRY_DSN"))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	hook, err := logrus_sentry.NewWithClientSentryHook(client, []logrus.Level{
+    logrus.PanicLevel,
+    logrus.FatalLevel,
+    logrus.ErrorLevel,
+  })
+
+  if err == nil {
+    log.Hooks.Add(hook)
+  }
+
+hook, err := NewWithClientSentryHook(client, []logrus.Level{
+	logrus.ErrorLevel,
+})
+
+
 	if env == "production" {
 		log.Info("Env is in production mode")
 		log.SetLevel(log.ErrorLevel)
@@ -73,6 +96,7 @@ func main() {
 	AuthRoutes(v1.Group("/auth"))
 	UserRoutes(v1.Group("/users"))
 	UnitRoutes(v1.Group("/units"))
+	CoreRoutes(v1.Group("/core"))
 
 	// Setup Swagger docs
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
