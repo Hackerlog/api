@@ -19,6 +19,8 @@ clean:
 run:
 	$(GOBUILD) -v
 	./$(BINARY_NAME)
+start:
+	fresh
 swagger:
 	swag init -g server.go
 sdk:

@@ -48,4 +48,12 @@ POST {{host}}/{{apiPrefix}}/auth/login
 
 ###
 
-GET {{host}}/{{apiPrefix}}/core/version
+GET {{host}}/{{apiPrefix}}/core/version?currentVersion=v0.3&os=darwin
+
+###
+
+GET {{host}}/{{apiPrefix}}/core/version?currentVersion=v0.3&os=windows
+
+###
+
+GET {{host}}/{{apiPrefix}}/core/version?currentVersion=v0.4&os=windows

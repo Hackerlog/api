@@ -32,16 +32,16 @@
   version = "v3.2.0"
 
 [[projects]]
-  name = "github.com/evalphobia/logrus_sentry"
-  packages = ["."]
-  revision = "b78b27461c8163c45abf4ab3a8330d2b1ee9456a"
-  version = "v0.4.6"
-
-[[projects]]
   branch = "master"
   name = "github.com/getsentry/raven-go"
   packages = ["."]
   revision = "ed7bcb39ff10f39ab08e317ce16df282845852fa"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/gin-contrib/sentry"
+  packages = ["."]
+  revision = "d974092f2d1924bca20f1e85f1257c22b68b2bdf"
 
 [[projects]]
   branch = "master"
@@ -280,6 +280,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "74501edb9405de4622a8f828cfd575c209c67d86399657120128e8e2000639fd"
+  inputs-digest = "2cdd77dcec21bc77bc34e80de3229ce864ac0942b13eb7117642e49747fb2e2c"
   solver-name = "gps-cdcl"
   solver-version = 1

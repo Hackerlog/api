@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/getsentry/raven-go"
-	"fmt"
-	"encoding/json"
+	"strings"
 	"net/http"
+	"encoding/json"
+	
+	"github.com/getsentry/raven-go"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
@@ -28,7 +29,7 @@ type ReleaseResponse struct {
 func isLatestVersion(c *gin.Context) {
 	var gBody ReleaseResponse
 	cv := c.Query("currentVersion")
-	// os := c.Query("os")
+	os := c.Query("os")
 	url := githubURL + "/repos/Hackerlog/core/releases/latest"
 	
 	resp, err := http.Get(url)
@@ -49,15 +50,31 @@ func isLatestVersion(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(gBody)
+	var download string
 
 	if cv != gBody.Tag {
-		// use os version to get the correct download
+		for _, i := range gBody.Assets {
+			if parseFilename(i.Download) == os {
+				download = i.Download
+				break
+			}
+		}
+		
 		c.JSON(http.StatusOK, gin.H{
 			"latest": false,
-			"downloads": gBody.Assets,
+			"download": download,
 		})
 	} else {
-		c.JSON(http.StatusOK, gin.H{"latest": true})
+		c.JSON(http.StatusOK, gin.H{
+			"latest": true,
+			"download": nil,
+		})
 	}
+}
+
+func parseFilename(f string) string {
+	n := strings.Split(f, "/")
+	m := n[len(n) - 1]
+	o := strings.Split(m, "_")
+	return o[len(o) - 2]
 }

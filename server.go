@@ -8,12 +8,12 @@ import (
 	
 	log "github.com/sirupsen/logrus"
 	raven "github.com/getsentry/raven-go"
-	"github.com/evalphobia/logrus_sentry"
 	"github.com/jinzhu/gorm"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"github.com/gin-contrib/sentry"
 )
 
 var env = os.Getenv("APP_ENV")
@@ -43,26 +43,8 @@ func init() {
 		log.Debug("Loaded .env file")
 	}
 
-	client, err := raven.New(os.Getenv("SENTRY_DSN"))
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	hook, err := logrus_sentry.NewWithClientSentryHook(client, []logrus.Level{
-    logrus.PanicLevel,
-    logrus.FatalLevel,
-    logrus.ErrorLevel,
-  })
-
-  if err == nil {
-    log.Hooks.Add(hook)
-  }
-
-hook, err := NewWithClientSentryHook(client, []logrus.Level{
-	logrus.ErrorLevel,
-})
-
+	raven.SetDSN(os.Getenv("SENTRY_DSN"))
+	raven.SetEnvironment(env)
 
 	if env == "production" {
 		log.Info("Env is in production mode")
@@ -90,6 +72,9 @@ func main() {
 	migrate(db)
 
 	r := gin.Default()
+
+	// Setup Sentry logging
+	r.Use(sentry.Recovery(raven.DefaultClient, false))
 
 	v1 := r.Group("/v1")
 
