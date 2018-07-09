@@ -1,37 +1,41 @@
 package main
 
 import (
-	"strings"
-	"net/http"
 	"encoding/json"
-	
+	"net/http"
+	"strings"
+
 	"github.com/getsentry/raven-go"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
 
+// TODO: Need to add a token to this call at some point
 var githubURL = "https://api.github.com"
 
 // CoreRoutes The routes that the core plugins use to determine if they are on the latest version
 func CoreRoutes(r *gin.RouterGroup) {
-	r.GET("/version", isLatestVersion)
+	r.GET("/version", latestVersion)
 }
 
+// Assets The download links within a response from Github
 type Assets struct {
 	Download string `json:"browser_download_url"`
 }
 
-type ReleaseResponse struct {
-	Tag string `json:"tag_name"`
+// Release The release response from Github
+type Release struct {
+	Tag    string   `json:"tag_name"`
 	Assets []Assets `json:"assets"`
 }
 
-func isLatestVersion(c *gin.Context) {
-	var gBody ReleaseResponse
+func latestVersion(c *gin.Context) {
+	var gBody Release
 	cv := c.Query("currentVersion")
 	os := c.Query("os")
+	arch := c.Query("arch")
 	url := githubURL + "/repos/Hackerlog/core/releases/latest"
-	
+
 	resp, err := http.Get(url)
 
 	if err != nil {
@@ -54,27 +58,29 @@ func isLatestVersion(c *gin.Context) {
 
 	if cv != gBody.Tag {
 		for _, i := range gBody.Assets {
-			if parseFilename(i.Download) == os {
+			if linkOs, linkArch := extractOsAndArch(i.Download); linkOs == os && linkArch == arch {
 				download = i.Download
 				break
 			}
 		}
-		
+
 		c.JSON(http.StatusOK, gin.H{
-			"latest": false,
+			"latest":   false,
 			"download": download,
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"latest": true,
+			"latest":   true,
 			"download": nil,
 		})
 	}
 }
 
-func parseFilename(f string) string {
+// This splits the URL to get the OS and Architecture
+func extractOsAndArch(f string) (string, string) {
 	n := strings.Split(f, "/")
-	m := n[len(n) - 1]
+	m := n[len(n)-1]
 	o := strings.Split(m, "_")
-	return o[len(o) - 2]
+	a := strings.Split(o[len(o)-1], ".")
+	return o[len(o)-2], a[0]
 }
