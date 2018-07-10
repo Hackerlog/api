@@ -5,15 +5,15 @@ import (
 
 	_ "github.com/hackerlog/api/docs"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	
-	log "github.com/sirupsen/logrus"
+
 	raven "github.com/getsentry/raven-go"
-	"github.com/jinzhu/gorm"
+	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
-	"github.com/gin-contrib/sentry"
 )
 
 var env = os.Getenv("APP_ENV")

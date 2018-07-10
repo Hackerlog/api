@@ -50,10 +50,12 @@ func getUnit(c *gin.Context) {
 
 	if err := db.Where("editor_token = ?", eToken).First(&user).Error; err != nil {
 		c.AbortWithError(http.StatusUnauthorized, err)
+		return
 	}
 
 	if err := db.Where("user_id = ?", &user.ID).Find(&units).Error; err != nil {
 		c.AbortWithError(http.StatusNotFound, err)
+		return
 	} else {
 		c.JSON(http.StatusOK, &units)
 	}
@@ -64,7 +66,10 @@ func createUnit(c *gin.Context) {
 	var unit Unit
 	var user User
 
-	c.BindJSON(&unit)
+	if err := c.BindJSON(&unit); err != nil {
+		c.AbortWithError(http.StatusUnauthorized, err)
+		return
+	}
 
 	db := GetDb()
 	eToken := c.GetHeader(xHeader)
