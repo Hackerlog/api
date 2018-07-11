@@ -1,18 +1,62 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is the Hackerlog API for collecting editor stats",
+        "description": "This is the Hackerlog API",
         "title": "Hackerlog API",
         "contact": {
             "name": "Deric Cain",
-            "url": "https://dericcain.com",
             "email": "deric.cain@gmail.com"
         },
         "license": {},
-        "version": "1.0"
+        "version": "v0.1"
     },
     "basePath": "/v1",
     "paths": {
+        "/core/version": {
+            "get": {
+                "description": "This endpoint takes a few parameters and with those parameters, it looks to see if",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "core"
+                ],
+                "summary": "Returns a link of the latest version of the Core app",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "X-Hackerlog-EditorToken",
+                        "name": "X-Hackerlog-EditorToken",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/main.VersionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/units": {
             "get": {
                 "description": "This gets all of the units of work for a specific user. The user is identified by the",
@@ -53,9 +97,6 @@
         "main.Unit": {
             "type": "object",
             "properties": {
-                "computer_type": {
-                    "type": "string"
-                },
                 "created_at": {
                     "type": "string"
                 },
@@ -66,8 +107,7 @@
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 },
                 "loc_deleted": {
                     "type": "integer"
@@ -91,8 +131,20 @@
                     "type": "string"
                 },
                 "user_id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
+                }
+            }
+        },
+        "main.VersionResponse": {
+            "type": "object",
+            "properties": {
+                "download": {
+                    "type": "string",
+                    "example": "https://github.com/Hackerlog/core/releases/download/v0.5/core_0.5_windows_amd64.zip"
+                },
+                "latest": {
+                    "type": "boolean",
+                    "example": false
                 }
             }
         }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -29,12 +30,46 @@ type Release struct {
 	Assets []Assets `json:"assets"`
 }
 
+// VersionResponse The response returned for the version endpoint
+type VersionResponse struct {
+	Latest   bool   `json:"latest" example:"false"`
+	Download string `json:"download" example:"https://github.com/Hackerlog/core/releases/download/v0.5/core_0.5_windows_amd64.zip"`
+}
+
+// @Summary Returns a link of the latest version of the Core app
+// @Description This endpoint takes a few parameters and with those parameters, it looks to see if
+// the client has the most recent version of the Core app. If it does, it sends a boolean saying so.
+// If it does not, then it sends back a boolean saying so, but also a URL to the latest download
+// specific to the OS and architecture submitted.
+// @Tags core
+// @Accept  json
+// @Produce  json
+// @Param X-Hackerlog-EditorToken header string true "X-Hackerlog-EditorToken"
+// @Success 200 {object} main.VersionResponse
+// @Failure 400 {string} string "Bad request"
+// @Failure 401 {string} string "Unauthorized"
+// @Router /core/version [get]
 func latestVersion(c *gin.Context) {
 	var gBody Release
+	var response VersionResponse
 	cv := c.Query("currentVersion")
 	os := c.Query("os")
 	arch := c.Query("arch")
 	url := githubURL + "/repos/Hackerlog/core/releases/latest"
+
+	// Do a little validation here to make sure we have a signed up user
+	var user User
+
+	db := GetDb()
+	eToken := c.GetHeader(xHeader)
+
+	if err := db.Where("editor_token = ?", eToken).First(&user).Error; err != nil {
+		raven.CaptureError(err, map[string]string{
+			"editor_token": eToken,
+		})
+		c.AbortWithError(http.StatusUnauthorized, err)
+		return
+	}
 
 	resp, err := http.Get(url)
 
@@ -54,26 +89,18 @@ func latestVersion(c *gin.Context) {
 		return
 	}
 
-	var download string
-
 	if cv != gBody.Tag {
 		for _, i := range gBody.Assets {
 			if linkOs, linkArch := extractOsAndArch(i.Download); linkOs == os && linkArch == arch {
-				download = i.Download
+				fmt.Println("Found it")
+				response.Download = i.Download
 				break
 			}
 		}
 
-		c.JSON(http.StatusOK, gin.H{
-			"latest":   false,
-			"download": download,
-		})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"latest":   true,
-			"download": nil,
-		})
+		response.Latest = true
 	}
+	c.JSON(http.StatusOK, response)
 }
 
 // This splits the URL to get the OS and Architecture

@@ -57,11 +57,10 @@ func init() {
 
 // @BasePath /v1
 // @title Hackerlog API
-// @version 1.0
-// @description This is the Hackerlog API for collecting editor stats
+// @version v0.1
+// @description This is the Hackerlog API
 
 // @contact.name Deric Cain
-// @contact.url https://dericcain.com
 // @contact.email deric.cain@gmail.com
 
 // @BasePath /v1
@@ -70,6 +69,10 @@ func main() {
 	defer db.Close()
 
 	migrate(db)
+
+	if env != "local" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
 	r := gin.Default()
 

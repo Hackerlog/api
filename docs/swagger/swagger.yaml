@@ -2,8 +2,6 @@ basePath: /v1
 definitions:
   main.Unit:
     properties:
-      computer_type:
-        type: string
       created_at:
         type: string
       editor_type:
@@ -11,7 +9,6 @@ definitions:
       file_name:
         type: string
       id:
-        example: 1
         type: integer
       loc_deleted:
         type: integer
@@ -28,19 +25,57 @@ definitions:
       updated_at:
         type: string
       user_id:
-        example: 1
         type: integer
+    type: object
+  main.VersionResponse:
+    properties:
+      download:
+        example: https://github.com/Hackerlog/core/releases/download/v0.5/core_0.5_windows_amd64.zip
+        type: string
+      latest:
+        example: false
+        type: boolean
     type: object
 info:
   contact:
     email: deric.cain@gmail.com
     name: Deric Cain
-    url: https://dericcain.com
-  description: This is the Hackerlog API for collecting editor stats
+  description: This is the Hackerlog API
   license: {}
   title: Hackerlog API
-  version: "1.0"
+  version: v0.1
 paths:
+  /core/version:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint takes a few parameters and with those parameters,
+        it looks to see if
+      parameters:
+      - description: X-Hackerlog-EditorToken
+        in: header
+        name: X-Hackerlog-EditorToken
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.VersionResponse'
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns a link of the latest version of the Core app
+      tags:
+      - core
   /units:
     get:
       consumes:

@@ -9,7 +9,7 @@ BINARY_UNIX=$(BINARY_NAME)_unix
 
 all: test build
 build: 
-	$(GOBUILD) -v
+	$(GOBUILD) -v -tags=jsoniter
 test: 
 	$(GOTEST) -v ./...
 clean: 
@@ -22,6 +22,7 @@ run:
 start:
 	fresh
 swagger:
+	rm -rf docs
 	swag init -g server.go
 sdk:
 	swagger-codegen generate -i docs/swagger/swagger.json -l typescript-fetch -o sdk
