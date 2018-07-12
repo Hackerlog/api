@@ -98,8 +98,12 @@ func latestVersion(c *gin.Context) {
 			}
 		}
 
+		response.Latest = false
+	} else {
 		response.Latest = true
+		response.Download = ""
 	}
+
 	c.JSON(http.StatusOK, response)
 }
 
