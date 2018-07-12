@@ -7,8 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var xHeader = "X-Hackerlog-EditorToken"
-
 // Unit This represents a file that has been edited, or, a "unit" of work
 type Unit struct {
 	ID          uint       `json:"id" gorm:"primary_key"`

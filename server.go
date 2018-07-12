@@ -16,7 +16,10 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
-var env = os.Getenv("APP_ENV")
+var (
+	env     = os.Getenv("APP_ENV")
+	xHeader = "X-Hackerlog-EditorToken"
+)
 
 func migrate(db *gorm.DB) {
 	db.AutoMigrate(&Unit{})
