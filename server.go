@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"strings"
 
 	_ "github.com/hackerlog/api/docs"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -79,12 +78,7 @@ func main() {
 
 	r := gin.Default()
 
-	// Get the allowed hosts from the .env (comma-separated)
-	allowedOrigins := strings.Split(os.Getenv("CORS_ALLOWED_HOSTS"), ",")
-	config := cors.DefaultConfig()
-	config.AllowOrigins = allowedOrigins
-
-	r.Use(cors.New(config))
+	r.Use(cors.Default())
 
 	// Setup Sentry logging
 	r.Use(sentry.Recovery(raven.DefaultClient, false))
