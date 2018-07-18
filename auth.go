@@ -24,6 +24,15 @@ func AuthRoutes(r *gin.RouterGroup) {
 	r.POST("/login", checkAuth)
 }
 
+// @Summary Authenticates a user
+// @Description Authenticates a user and returns a JWT on successful login
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} main.Auth
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 404 {string} string "Not Found"
+// @Router /users/login [post]
 func checkAuth(c *gin.Context) {
 	var user User
 	var rUser User

@@ -1,5 +1,23 @@
 basePath: /v1
 definitions:
+  main.Auth:
+    properties:
+      created_at:
+        type: string
+      expires_at:
+        type: integer
+      id:
+        type: integer
+      token:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/main.User'
+        type: object
+      user_id:
+        type: integer
+    type: object
   main.GenericResponse:
     properties:
       error:
@@ -33,6 +51,28 @@ definitions:
         type: string
       user_id:
         type: integer
+    type: object
+  main.User:
+    properties:
+      created_at:
+        type: string
+      editor_token:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      units:
+        items:
+          $ref: '#/definitions/main.Unit'
+        type: array
+      updated_at:
+        type: string
+    required:
+    - email
+    - name
     type: object
   main.VersionResponse:
     properties:
@@ -131,4 +171,28 @@ paths:
       summary: Gets units of work for a user
       tags:
       - units
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns a JWT on successful login
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Auth'
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Authenticates a user
+      tags:
+      - auth
 swagger: "2.0"

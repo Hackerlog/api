@@ -26,7 +26,8 @@ func setupDb() {
 	var user User
 	user.Email = "test@test.com"
 	user.EditorToken = testEditorToken
-	user.Name = "Test Dummy"
+	user.FirstName = "Test"
+	user.LastName = "Dummy"
 	user.Password = "password"
 
 	db.Create(&user)

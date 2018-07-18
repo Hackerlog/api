@@ -13,7 +13,8 @@ import (
 type User struct {
 	ID                 uint       `json:"id" gorm:"primary_key"`
 	Email              string     `json:"email" gorm:"type:varchar(100);unique_index" binding:"required"`
-	Name               string     `json:"name" binding:"required"`
+	FirstName          string     `json:"first_name" binding:"required"`
+	LastName           string     `json:"last_name" binding:"required"`
 	Password           string     `json:"-" binding:"required"`
 	EditorToken        string     `json:"editor_token" gorm:"index"`
 	PasswordResetToken string     `json:"-"`
@@ -75,6 +76,7 @@ func findUserByEditorToken(c *gin.Context) {
 func createUser(c *gin.Context) {
 	var user User
 	db := GetDb()
+	c.BindJSON(&user)
 	c.BindJSON(&user)
 
 	db.Create(&user)
