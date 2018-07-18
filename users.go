@@ -32,7 +32,10 @@ func (u *User) BeforeCreate() (err error) {
 	}
 
 	u.Password = hashedPassword
-	u.EditorToken = uuid.New()
+
+	if u.EditorToken == "" {
+		u.EditorToken = uuid.New()
+	}
 
 	return nil
 }

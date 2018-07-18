@@ -1,5 +1,12 @@
 basePath: /v1
 definitions:
+  main.GenericResponse:
+    properties:
+      error:
+        type: string
+      success:
+        type: boolean
+    type: object
   main.Unit:
     properties:
       created_at:
@@ -76,6 +83,30 @@ paths:
       summary: Returns a link of the latest version of the Core app
       tags:
       - core
+  /mailing-list:
+    post:
+      consumes:
+      - application/json
+      description: This adds a user to the mailing list
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.GenericResponse'
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Adds a user to the mailing list
+      tags:
+      - mailing-list
   /units:
     get:
       consumes:

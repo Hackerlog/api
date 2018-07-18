@@ -57,6 +57,42 @@
                 }
             }
         },
+        "/mailing-list": {
+            "post": {
+                "description": "This adds a user to the mailing list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mailing-list"
+                ],
+                "summary": "Adds a user to the mailing list",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/main.GenericResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/units": {
             "get": {
                 "description": "This gets all of the units of work for a specific user. The user is identified by the",
@@ -94,6 +130,17 @@
         }
     },
     "definitions": {
+        "main.GenericResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
         "main.Unit": {
             "type": "object",
             "properties": {

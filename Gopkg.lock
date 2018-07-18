@@ -38,6 +38,12 @@
   revision = "ed7bcb39ff10f39ab08e317ce16df282845852fa"
 
 [[projects]]
+  name = "github.com/gin-contrib/cors"
+  packages = ["."]
+  revision = "cf4846e6a636a76237a28d9286f163c132e841bc"
+  version = "v1.2"
+
+[[projects]]
   branch = "master"
   name = "github.com/gin-contrib/sentry"
   packages = ["."]
@@ -193,13 +199,13 @@
   version = "v1.2.2"
 
 [[projects]]
-  branch = "master"
   name = "github.com/swaggo/gin-swagger"
   packages = [
     ".",
     "swaggerFiles"
   ]
   revision = "8cf3fa9932e247205d1cf2be6fd13a9d09ceb9a4"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/swaggo/swag"
@@ -241,7 +247,7 @@
     "unix",
     "windows"
   ]
-  revision = "151529c776cdc58ddbe7963ba9af779f3577b419"
+  revision = "ac767d655b305d4e9612f5f6e33120b9176c4ad4"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -272,6 +278,12 @@
   version = "v8.18.2"
 
 [[projects]]
+  name = "gopkg.in/mailgun/mailgun-go.v1"
+  packages = ["."]
+  revision = "a4002e2df2e8ca2da6a6fbb4a72871b504e49f50"
+  version = "v1.1.0"
+
+[[projects]]
   name = "gopkg.in/yaml.v2"
   packages = ["."]
   revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
@@ -280,6 +292,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0f3e490a1ba2fbffbe78ed03b13d8a888b2847bfe7c44a1f1f7941a9a6b99ce6"
+  inputs-digest = "8d03ea39d36dad9f48443dc9251b6b0ad349fe9f58a865d2877fb6fd31604154"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -57,3 +57,12 @@ GET {{host}}/{{apiPrefix}}/core/version?currentVersion=v0.3&os=windows&arch=amd6
 ###
 
 GET {{host}}/{{apiPrefix}}/core/version?currentVersion=v0.4&os=windows
+
+
+###
+POST {{host}}/{{apiPrefix}}/mailing-list
+Content-Type: "application/json"
+
+{
+  "email": "deric.cain@gmail.com"
+}

@@ -10,6 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var testEditorToken = "test"
+
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 	v1 := r.Group("v1")
@@ -17,14 +19,29 @@ func setupRouter() *gin.Engine {
 	return r
 }
 
+func setupDb() {
+	db := InitTestDB()
+	db.AutoMigrate(&User{})
+
+	var user User
+	user.Email = "test@test.com"
+	user.EditorToken = testEditorToken
+	user.Name = "Test Dummy"
+	user.Password = "password"
+
+	db.Create(&user)
+}
+
 func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(method, path, nil)
+	req.Header.Add(xHeader, testEditorToken)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	return w
 }
 
 func TestIsLatestVersionRoute(t *testing.T) {
+	setupDb()
 	r := setupRouter()
 	w := performRequest(r, "GET", "/v1/core/version?currentVersion=v0.04&os=darwin")
 	assert.Equal(t, http.StatusOK, w.Code)

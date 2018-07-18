@@ -25,5 +25,13 @@ swagger:
 	rm -rf docs
 	swag init -g server.go
 sdk:
-	swagger-codegen generate -i docs/swagger/swagger.json -l typescript-fetch -o sdk
+	swagger-codegen generate \
+		-i docs/swagger/swagger.json \
+		-l typescript-fetch \
+		-t sdk-config/template \
+		-o ~/Code/web/src/services/api \
+		-c sdk-config/config.json \
+		--remove-operation-id-prefix \
+		--git-repo-id web-sdk \
+		--git-user-id hackerlog
 

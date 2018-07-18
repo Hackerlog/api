@@ -2,11 +2,13 @@ package main
 
 import (
 	"os"
+	"strings"
 
 	_ "github.com/hackerlog/api/docs"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 
 	raven "github.com/getsentry/raven-go"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -62,10 +64,8 @@ func init() {
 // @title Hackerlog API
 // @version v0.1
 // @description This is the Hackerlog API
-
 // @contact.name Deric Cain
 // @contact.email deric.cain@gmail.com
-
 // @BasePath /v1
 func main() {
 	db := DbInit()
@@ -79,15 +79,24 @@ func main() {
 
 	r := gin.Default()
 
+	// Get the allowed hosts from the .env (comma-separated)
+	allowedOrigins := strings.Split(os.Getenv("CORS_ALLOWED_HOSTS"), ",")
+	config := cors.DefaultConfig()
+	config.AllowOrigins = allowedOrigins
+
+	r.Use(cors.New(config))
+
 	// Setup Sentry logging
 	r.Use(sentry.Recovery(raven.DefaultClient, false))
 
+	// Wrap all routes in v1/ URL
 	v1 := r.Group("/v1")
 
 	AuthRoutes(v1.Group("/auth"))
 	UserRoutes(v1.Group("/users"))
 	UnitRoutes(v1.Group("/units"))
 	CoreRoutes(v1.Group("/core"))
+	MailingListRoutes(v1.Group("/mailing-list"))
 
 	// Setup Swagger docs
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
