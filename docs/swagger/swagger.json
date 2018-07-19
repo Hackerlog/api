@@ -249,7 +249,8 @@
             "type": "object",
             "required": [
                 "email",
-                "name"
+                "first_name",
+                "last_name"
             ],
             "properties": {
                 "created_at": {
@@ -261,10 +262,13 @@
                 "email": {
                     "type": "string"
                 },
+                "first_name": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
-                "name": {
+                "last_name": {
                     "type": "string"
                 },
                 "units": {

@@ -60,9 +60,11 @@ definitions:
         type: string
       email:
         type: string
+      first_name:
+        type: string
       id:
         type: integer
-      name:
+      last_name:
         type: string
       units:
         items:
@@ -72,7 +74,8 @@ definitions:
         type: string
     required:
     - email
-    - name
+    - first_name
+    - last_name
     type: object
   main.VersionResponse:
     properties:
