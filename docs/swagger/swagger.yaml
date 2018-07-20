@@ -72,10 +72,18 @@ definitions:
         type: array
       updated_at:
         type: string
+      username:
+        type: string
     required:
-    - email
     - first_name
+    - username
+    - email
     - last_name
+    type: object
+  main.UsernameResponse:
+    properties:
+      is_available:
+        type: boolean
     type: object
   main.VersionResponse:
     properties:
@@ -95,6 +103,30 @@ info:
   title: Hackerlog API
   version: v0.1
 paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns a JWT on successful login
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Auth'
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Authenticates a user
+      tags:
+      - auth
   /core/version:
     get:
       consumes:
@@ -105,6 +137,21 @@ paths:
       - description: X-Hackerlog-EditorToken
         in: header
         name: X-Hackerlog-EditorToken
+        required: true
+        type: string
+      - description: Current core version in client
+        in: query
+        name: currentVersion
+        required: true
+        type: string
+      - description: The client OS
+        in: query
+        name: os
+        required: true
+        type: string
+      - description: The client architecture
+        in: query
+        name: arch
         required: true
         type: string
       produces:
@@ -174,28 +221,126 @@ paths:
       summary: Gets units of work for a user
       tags:
       - units
-  /users/login:
-    post:
+  /users:
+    get:
       consumes:
       - application/json
-      description: Authenticates a user and returns a JWT on successful login
+      description: Finds a user given their editor token as a path param
+      parameters:
+      - description: User's Editor Token
+        in: body
+        name: editor
+        required: true
+        schema:
+          type: object
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.Auth'
+            $ref: '#/definitions/main.User'
             type: object
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
         "404":
           description: Not Found
           schema:
             type: string
-      summary: Authenticates a user
+      summary: Gets a user by their editor token
       tags:
-      - auth
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Creates a user with the body params that are passed in
+      parameters:
+      - description: Email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: object
+      - description: First Name
+        in: body
+        name: first_name
+        required: true
+        schema:
+          type: object
+      - description: Last Name
+        in: body
+        name: last_name
+        required: true
+        schema:
+          type: object
+      - description: Password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.User'
+            type: object
+        "401":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Creates/Registers a user
+      tags:
+      - users
+  /users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Finds a user given their ID as a path param
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.User'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Gets a user by their ID
+      tags:
+      - users
+  /users/username:
+    get:
+      consumes:
+      - application/json
+      description: Checks if a username is available and responds as such
+      parameters:
+      - description: Username search using q as key
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.UsernameResponse'
+            type: object
+        "401":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Checks if a username is available
+      tags:
+      - users
 swagger: "2.0"

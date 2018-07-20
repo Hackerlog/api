@@ -45,6 +45,9 @@ type VersionResponse struct {
 // @Accept  json
 // @Produce  json
 // @Param X-Hackerlog-EditorToken header string true "X-Hackerlog-EditorToken"
+// @Param currentVersion query string true "Current core version in client"
+// @Param os query string true "The client OS"
+// @Param arch query string true "The client architecture"
 // @Success 200 {object} main.VersionResponse
 // @Failure 400 {string} string "Bad request"
 // @Failure 401 {string} string "Unauthorized"

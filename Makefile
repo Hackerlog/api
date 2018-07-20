@@ -33,5 +33,5 @@ sdk:
 		-c sdk-config/config.json \
 		--remove-operation-id-prefix \
 		--git-repo-id web-sdk \
-		--git-user-id hackerlog
-
+		--git-user-id hackerlog \
+		--additional-properties modelPropertyNaming=original

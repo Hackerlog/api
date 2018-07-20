@@ -41,7 +41,7 @@ PUT {{host}}/{{apiPrefix}}/users/2
 POST {{host}}/{{apiPrefix}}/auth/login
 
 {
-  "email": "deric.cain2@gmail.com",
+  "email": "deric.cain@gmail.com",
   "password": "password"
 }
 
