@@ -237,50 +237,50 @@
                     "users"
                 ],
                 "summary": "Creates/Registers a user",
-                "parameters": [
-                    {
-                        "description": "Email",
-                        "name": "email",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
-                    {
-                        "description": "First Name",
-                        "name": "first_name",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
-                    {
-                        "description": "Last Name",
-                        "name": "last_name",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
-                    {
-                        "description": "Password",
-                        "name": "password",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                ],
                 "responses": {
                     "201": {
                         "description": "Created",
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/main.User"
+                        }
+                    },
+                    "401": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/email": {
+            "get": {
+                "description": "Checks if an email is available and responds as such",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Checks if an email is available",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "email search using q as key",
+                        "name": "q",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/main.AvailableResponse"
                         }
                     },
                     "401": {
@@ -318,7 +318,7 @@
                         "description": "OK",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/main.UsernameResponse"
+                            "$ref": "#/definitions/main.AvailableResponse"
                         }
                     },
                     "401": {
@@ -398,6 +398,14 @@
                 }
             }
         },
+        "main.AvailableResponse": {
+            "type": "object",
+            "properties": {
+                "is_available": {
+                    "type": "boolean"
+                }
+            }
+        },
         "main.GenericResponse": {
             "type": "object",
             "properties": {
@@ -453,10 +461,10 @@
         "main.User": {
             "type": "object",
             "required": [
-                "first_name",
+                "last_name",
                 "username",
                 "email",
-                "last_name"
+                "first_name"
             ],
             "properties": {
                 "created_at": {
@@ -488,14 +496,6 @@
                 },
                 "username": {
                     "type": "string"
-                }
-            }
-        },
-        "main.UsernameResponse": {
-            "type": "object",
-            "properties": {
-                "is_available": {
-                    "type": "boolean"
                 }
             }
         },

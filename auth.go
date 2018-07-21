@@ -71,6 +71,7 @@ func checkAuth(c *gin.Context) {
 				} else {
 					log.Debug("Token created and stored in DB")
 					c.JSON(http.StatusOK, gin.H{
+						"user":      user,
 						"token":     &jwt.Token,
 						"expiresAt": &jwt.ExpiresAt,
 					})

@@ -47,6 +47,7 @@ func UserRoutes(r *gin.RouterGroup) {
 	r.GET("/find/:id", findUser)
 	r.GET("/units/:id", getUserWithUnits)
 	r.GET("/username", usernameIsAvailable)
+	r.GET("/email", emailIsAvailable)
 	r.GET("", findUserByEditorToken)
 	r.POST("", createUser)
 }
@@ -98,18 +99,14 @@ func findUserByEditorToken(c *gin.Context) {
 // @Tags users
 // @Accept  json
 // @Produce  json
-// @param email body string true "Email"
-// @param first_name body string true "First Name"
-// @param last_name body string true "Last Name"
-// @param password body string true "Password"
 // @Success 201 {object} main.User
 // @Failure 401 {string} string "Bad Request"
 // @Router /users [post]
 func createUser(c *gin.Context) {
 	var user User
 	db := GetDb()
-	c.BindJSON(&user)
-	c.BindJSON(&user)
+
+	c.ShouldBindJSON(&user)
 
 	if err := db.Create(&user).Error; err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
@@ -131,13 +128,8 @@ func getUserWithUnits(c *gin.Context) {
 	}
 }
 
-// UsernameRequest The username request object
-type UsernameRequest struct {
-	Username string `json:"username"`
-}
-
-// UsernameResponse The username response object
-type UsernameResponse struct {
+// AvailableResponse The username response object
+type AvailableResponse struct {
 	IsAvailable bool `json:"is_available"`
 }
 
@@ -147,17 +139,42 @@ type UsernameResponse struct {
 // @Accept  json
 // @Produce  json
 // @param q query string false "Username search using q as key"
-// @Success 200 {object} main.UsernameResponse
+// @Success 200 {object} main.AvailableResponse
 // @Failure 401 {string} string "Bad Request"
 // @Router /users/username [get]
 func usernameIsAvailable(c *gin.Context) {
 	username := c.Query("q")
 	var user User
-	var res UsernameResponse
+	var res AvailableResponse
 
 	db := GetDb()
 
 	if err := db.Where("username = ?", username).First(&user).Error; err != nil {
+		res.IsAvailable = true
+		c.JSON(http.StatusOK, res)
+	} else {
+		res.IsAvailable = false
+		c.JSON(http.StatusOK, res)
+	}
+}
+
+// @Summary Checks if an email is available
+// @Description Checks if an email is available and responds as such
+// @Tags users
+// @Accept  json
+// @Produce  json
+// @param q query string false "email search using q as key"
+// @Success 200 {object} main.AvailableResponse
+// @Failure 401 {string} string "Bad Request"
+// @Router /users/email [get]
+func emailIsAvailable(c *gin.Context) {
+	email := c.Query("q")
+	var user User
+	var res AvailableResponse
+
+	db := GetDb()
+
+	if err := db.Where("email = ?", email).First(&user).Error; err != nil {
 		res.IsAvailable = true
 		c.JSON(http.StatusOK, res)
 	} else {

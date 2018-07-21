@@ -18,6 +18,11 @@ definitions:
       user_id:
         type: integer
     type: object
+  main.AvailableResponse:
+    properties:
+      is_available:
+        type: boolean
+    type: object
   main.GenericResponse:
     properties:
       error:
@@ -75,15 +80,10 @@ definitions:
       username:
         type: string
     required:
-    - first_name
+    - last_name
     - username
     - email
-    - last_name
-    type: object
-  main.UsernameResponse:
-    properties:
-      is_available:
-        type: boolean
+    - first_name
     type: object
   main.VersionResponse:
     properties:
@@ -252,31 +252,6 @@ paths:
       consumes:
       - application/json
       description: Creates a user with the body params that are passed in
-      parameters:
-      - description: Email
-        in: body
-        name: email
-        required: true
-        schema:
-          type: object
-      - description: First Name
-        in: body
-        name: first_name
-        required: true
-        schema:
-          type: object
-      - description: Last Name
-        in: body
-        name: last_name
-        required: true
-        schema:
-          type: object
-      - description: Password
-        in: body
-        name: password
-        required: true
-        schema:
-          type: object
       produces:
       - application/json
       responses:
@@ -318,6 +293,31 @@ paths:
       summary: Gets a user by their ID
       tags:
       - users
+  /users/email:
+    get:
+      consumes:
+      - application/json
+      description: Checks if an email is available and responds as such
+      parameters:
+      - description: email search using q as key
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.AvailableResponse'
+            type: object
+        "401":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Checks if an email is available
+      tags:
+      - users
   /users/username:
     get:
       consumes:
@@ -334,7 +334,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.UsernameResponse'
+            $ref: '#/definitions/main.AvailableResponse'
             type: object
         "401":
           description: Bad Request
