@@ -28,6 +28,8 @@ type Auth struct {
 func AuthRoutes(r *gin.RouterGroup) {
 	r.POST("/login", checkAuth)
 	r.POST("/password-reset", passwordReset)
+	r.POST("/reset-password", resetPassword)
+	r.DELETE("/purge-resets", purgeResets)
 }
 
 // @Summary Authenticates a user
@@ -99,9 +101,17 @@ func addJwtToDb(j *JWT, userID uint) {
 
 // ResetRequest This is the reset password request
 type ResetRequest struct {
-	Email string `json:"email"`
+	Email string `json:"email" binding:"required"`
 }
 
+// @Summary Starts a password reset
+// @Description Sends an email to the user with a link to reset their password
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} main.GenericResponse
+// @Failure 400 {string} string "Bad Request"
+// @Router /auth/password-reset [post]
 func passwordReset(c *gin.Context) {
 	var req ResetRequest
 	var user User
@@ -147,4 +157,92 @@ func sendResetEmail(email string, resetKey string) (string, error) {
 		log.Error("Password Reset email did not send", err)
 	}
 	return id, err
+}
+
+// ResetPostRequest This is the reset password request POST
+type ResetPostRequest struct {
+	Email    string `json:"email" binding:"required"`
+	Token    string `json:"token" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+// @Summary Resets a user's password
+// @Description Allows the user to reset their password with the submitted password
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} main.GenericResponse
+// @Failure 400 {string} string "Bad Request"
+// @Failure 404 {string} string "Not found"
+// @Router /auth/reset-password [post]
+func resetPassword(c *gin.Context) {
+	var req ResetPostRequest
+	var user User
+	var res GenericResponse
+
+	var (
+		missing = "The token is missing from the request"
+		expired = "The password reset has expired. Please try to reset it again."
+		noMatch = "The token does not match what we have. Try again."
+		noEmail = "Are you sure about that email address? Something doesn't look right."
+	)
+
+	res.Success = false
+
+	c.ShouldBindJSON(&req)
+
+	if req.Token == "" {
+		res.Error = missing
+		c.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	db := GetDb()
+
+	if err := db.Where("email = ?", req.Email).First(&user).Error; err != nil {
+		res.Error = noEmail
+		c.JSON(http.StatusNotFound, res)
+	} else {
+		if user.PasswordResetToken == "" {
+			res.Error = expired
+			c.JSON(http.StatusNotFound, res)
+			return
+		}
+
+		if req.Token != user.PasswordResetToken {
+			res.Error = noMatch
+			c.JSON(http.StatusBadRequest, res)
+			return
+		}
+
+		password, _ := HashPassword(req.Password)
+		user.PasswordResetToken = ""
+		user.Password = password
+		db.Save(&user)
+
+		res.Success = true
+
+		c.JSON(http.StatusOK, res)
+	}
+}
+
+func purgeResets(c *gin.Context) {
+	v := c.GetHeader(xpHeader)
+	var user User
+	t := time.Now().Add(time.Duration(-15) * time.Minute)
+	log.Debug(v)
+
+	if v == "" || v != os.Getenv("APP_PURGE_TOKEN") {
+		log.Debug("No token or token does not match")
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
+	db := GetDb()
+	if err := db.Model(&user).Where("password_reset_token != ? AND updated_at < ?", "", t).Update("password_reset_token", "").Error; err != nil {
+		log.Debug("No matches in the database", err)
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"success": true})
 }

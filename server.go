@@ -20,6 +20,7 @@ import (
 var (
 	env     = os.Getenv("APP_ENV")
 	xHeader = "X-Hackerlog-EditorToken"
+	xpHeader = "X-Hackerlog-PurgeToken"
 )
 
 func migrate(db *gorm.DB) {

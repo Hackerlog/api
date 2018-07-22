@@ -74,3 +74,18 @@ Content-Type: "application/json"
 {
   "email": "deric.cain@gmail.com"
 }
+
+###
+POST {{host}}/{{apiPrefix}}/auth/reset-password
+Content-Type: "application/json"
+
+{
+  "email": "deric.cain@gmail.com",
+  "token": "e17a1931-ba5d-4b18-9d6b-d29c4083e622",
+  "password": "password"
+}
+
+###
+DELETE {{host}}/{{apiPrefix}}/auth/purge-resets
+Content-Type: "application/json"
+X-Hackerlog-PurgeToken: punt-smek-tim-pank-pub-drect-hoss-vuk

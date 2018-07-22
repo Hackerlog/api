@@ -127,6 +127,50 @@ paths:
       summary: Authenticates a user
       tags:
       - auth
+  /auth/password-reset:
+    post:
+      consumes:
+      - application/json
+      description: Sends an email to the user with a link to reset their password
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.GenericResponse'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Starts a password reset
+      tags:
+      - auth
+  /auth/reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Allows the user to reset their password with the submitted password
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.GenericResponse'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not found
+          schema:
+            type: string
+      summary: Resets a user's password
+      tags:
+      - auth
   /core/version:
     get:
       consumes:
