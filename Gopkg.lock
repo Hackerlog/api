@@ -26,6 +26,12 @@
   version = "v1.1.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/dchest/uniuri"
+  packages = ["."]
+  revision = "8902c56451e9b58ff940bbe5fec35d5f9c04584a"
+
+[[projects]]
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
   revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
@@ -292,6 +298,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e6dd5dac7b24ffd1e97ccad8bfc77a17907f8b51113c83698ca9295ca5e12773"
+  inputs-digest = "6e4afd9c0eb6e55a3102faa9a2cb0b0a61810e5e9a493b5f5c50950a8c48db93"
   solver-name = "gps-cdcl"
   solver-version = 1

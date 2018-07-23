@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/dchest/uniuri"
 	"github.com/gin-gonic/gin"
-	"github.com/pborman/uuid"
 	log "github.com/sirupsen/logrus"
 	mailgun "gopkg.in/mailgun/mailgun-go.v1"
 )
@@ -126,7 +126,7 @@ func passwordReset(c *gin.Context) {
 	if err := db.Where("email = ?", req.Email).First(&user).Error; err != nil {
 		c.JSON(http.StatusOK, res)
 	} else {
-		token := uuid.New()
+		token := uniuri.NewLen(120)
 		user.PasswordResetToken = token
 		db.Save(&user)
 		if _, err = sendResetEmail(user.Email, token); err != nil {
