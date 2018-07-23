@@ -10,6 +10,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sentry"
 	"github.com/gin-gonic/gin"
+	_ "github.com/heroku/x/hmetrics/onload"
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
@@ -18,8 +19,8 @@ import (
 )
 
 var (
-	env     = os.Getenv("APP_ENV")
-	xHeader = "X-Hackerlog-EditorToken"
+	env      = os.Getenv("APP_ENV")
+	xHeader  = "X-Hackerlog-EditorToken"
 	xpHeader = "X-Hackerlog-PurgeToken"
 )
 

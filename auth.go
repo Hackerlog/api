@@ -137,7 +137,7 @@ func passwordReset(c *gin.Context) {
 }
 
 func sendResetEmail(email string, resetKey string) (string, error) {
-	template, err := ioutil.ReadFile("emails/reset-password.html")
+	template, err := ioutil.ReadFile("emails/password-reset.html")
 	if err != nil {
 		log.Error("Could not read email template file", err)
 	}

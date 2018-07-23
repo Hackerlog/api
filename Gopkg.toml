@@ -64,3 +64,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/dchest/uniuri"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/heroku/x"
