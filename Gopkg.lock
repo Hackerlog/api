@@ -209,7 +209,10 @@
 
 [[projects]]
   name = "github.com/stretchr/testify"
-  packages = ["assert"]
+  packages = [
+    "assert",
+    "require"
+  ]
   revision = "f35b8ab0b5a2cef36673838d662e249dd9c94686"
   version = "v1.2.2"
 
@@ -233,6 +236,17 @@
   packages = ["codec"]
   revision = "b4c50a2b199d93b13dc15e78929cfb23bfdf21ab"
   version = "v1.1.1"
+
+[[projects]]
+  name = "github.com/ulule/limiter"
+  packages = [
+    ".",
+    "drivers/middleware/gin",
+    "drivers/store/common",
+    "drivers/store/memory"
+  ]
+  revision = "f0ff82677fc4826ddae9ac45f2e11462fa245dad"
+  version = "v2.2.0"
 
 [[projects]]
   branch = "master"
@@ -307,6 +321,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d165603ae92d1d1f89e41841dffd972afb661824d6c6605ac1351dc58f5c1c93"
+  inputs-digest = "85a720405a3e8e0e4c440c43e0cecd5317c6bada35909caa4051048d4b998354"
   solver-name = "gps-cdcl"
   solver-version = 1

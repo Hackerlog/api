@@ -80,10 +80,10 @@ definitions:
       username:
         type: string
     required:
-    - last_name
+    - first_name
     - username
     - email
-    - first_name
+    - last_name
     type: object
   main.VersionResponse:
     properties:

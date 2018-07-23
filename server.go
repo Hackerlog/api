@@ -16,6 +16,9 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"github.com/ulule/limiter"
+	mgin "github.com/ulule/limiter/drivers/middleware/gin"
+	memory "github.com/ulule/limiter/drivers/store/memory"
 )
 
 var (
@@ -81,6 +84,19 @@ func main() {
 	r := gin.Default()
 
 	r.Use(cors.Default())
+
+	// Setup rate limiting
+	rate, err := limiter.NewRateFromFormatted("500-m")
+
+	if err != nil {
+		log.Error("Rate limiting crapped out", err)
+	}
+
+	store := memory.NewStore()
+	rateLimiting := mgin.NewMiddleware(limiter.New(store, rate))
+
+	r.ForwardedByClientIP = true
+	r.Use(rateLimiting)
 
 	// Setup Sentry logging
 	r.Use(sentry.Recovery(raven.DefaultClient, false))

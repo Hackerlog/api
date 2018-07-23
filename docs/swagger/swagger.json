@@ -527,10 +527,10 @@
         "main.User": {
             "type": "object",
             "required": [
-                "last_name",
+                "first_name",
                 "username",
                 "email",
-                "first_name"
+                "last_name"
             ],
             "properties": {
                 "created_at": {

@@ -5,7 +5,7 @@
   go-tests = true
   unused-packages = true
 
-[[constraint]]
+[[override]]
   name = "github.com/gin-gonic/gin"
   branch = "master"
 
@@ -68,3 +68,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/heroku/x"
+
+[[override]]
+  name = "github.com/ulule/limiter"
+  version = "2.2.0"

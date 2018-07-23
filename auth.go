@@ -184,7 +184,6 @@ func resetPassword(c *gin.Context) {
 		missing = "The token is missing from the request"
 		expired = "The password reset has expired. Please try to reset it again."
 		noMatch = "The token does not match what we have. Try again."
-		noEmail = "Are you sure about that email address? Something doesn't look right."
 	)
 
 	res.Success = false
@@ -199,19 +198,13 @@ func resetPassword(c *gin.Context) {
 
 	db := GetDb()
 
-	if err := db.Where("email = ?", req.Email).First(&user).Error; err != nil {
-		res.Error = noEmail
+	if err := db.Where("password_reset_token = ?", req.Token).First(&user).Error; err != nil {
+		res.Error = noMatch
 		c.JSON(http.StatusNotFound, res)
 	} else {
 		if user.PasswordResetToken == "" {
 			res.Error = expired
 			c.JSON(http.StatusNotFound, res)
-			return
-		}
-
-		if req.Token != user.PasswordResetToken {
-			res.Error = noMatch
-			c.JSON(http.StatusBadRequest, res)
 			return
 		}
 
