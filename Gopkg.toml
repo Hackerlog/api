@@ -1,5 +1,9 @@
 [metadata.heroku]
-  root-package = "github.com/dericgw/blog-api"
+  root-package = "github.com/hackerlog/api"
+
+[prune]
+  go-tests = true
+  unused-packages = true
 
 [[constraint]]
   name = "github.com/gin-gonic/gin"
@@ -8,10 +12,6 @@
 [[constraint]]
   name = "github.com/jinzhu/gorm"
   version = "1.9.1"
-
-[prune]
-  go-tests = true
-  unused-packages = true
 
 [[constraint]]
   branch = "master"
@@ -32,3 +32,31 @@
 [[constraint]]
   name = "github.com/sirupsen/logrus"
   version = "1.0.5"
+
+[[constraint]]
+  name = "github.com/pborman/uuid"
+  version = "1.1.0"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/swaggo/gin-swagger"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/getsentry/raven-go"
+
+[[constraint]]
+  name = "github.com/evalphobia/logrus_sentry"
+  version = "0.4.6"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gin-contrib/sentry"
+
+[[constraint]]
+  name = "gopkg.in/mailgun/mailgun-go.v1"
+  version = "1.1.0"
+
+[[constraint]]
+  name = "github.com/gin-contrib/cors"
+  version = "1.2.0"

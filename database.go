@@ -1,4 +1,4 @@
-package common
+package main
 
 import (
 	"os"
@@ -15,12 +15,17 @@ var (
 	TempDb = "../test.sqlite"
 )
 
-// Init Connects to the database
-func Init() *gorm.DB {
+// DbInit Connects to the database
+func DbInit() *gorm.DB {
 	db, err := gorm.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Error(err)
 	}
+
+	if os.Getenv("APP_ENV") == "local" {
+		db.LogMode(true)
+	}
+
 	DB = db
 	return DB
 }

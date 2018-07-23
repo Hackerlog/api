@@ -3,26 +3,37 @@ package main
 import (
 	"os"
 
-	"github.com/gin-gonic/gin"
-
-	"github.com/dericgw/blog-api/auth"
-	"github.com/dericgw/blog-api/common"
-	"github.com/dericgw/blog-api/users"
+	_ "github.com/hackerlog/api/docs"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+
+	raven "github.com/getsentry/raven-go"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/sentry"
+	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
-var env = os.Getenv("APP_ENV")
+var (
+	env     = os.Getenv("APP_ENV")
+	xHeader = "X-Hackerlog-EditorToken"
+	xpHeader = "X-Hackerlog-PurgeToken"
+)
 
-func migrate() {
-	users.Migrate()
-	auth.Migrate()
+func migrate(db *gorm.DB) {
+	db.AutoMigrate(&Unit{})
+	db.AutoMigrate(&Auth{})
+	db.AutoMigrate(&User{})
+	log.Debug("Migrated DB")
 }
 
 func getPort() string {
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
+		log.Debug("No port found in the .env file")
 		return ":8000"
 	}
 	return ":" + port
@@ -33,24 +44,57 @@ func init() {
 
 	if err != nil {
 		log.Error("No .env file found", err)
+	} else {
+		log.Debug("Loaded .env file")
 	}
 
+	raven.SetDSN(os.Getenv("SENTRY_DSN"))
+	raven.SetEnvironment(env)
+
 	if env == "production" {
+		log.Info("Env is in production mode")
 		log.SetLevel(log.ErrorLevel)
+	} else {
+		log.SetLevel(log.DebugLevel)
+		log.Debug("Logging everything!!")
 	}
 }
 
+// @BasePath /v1
+// @title Hackerlog API
+// @version v0.1
+// @description This is the Hackerlog API
+// @contact.name Deric Cain
+// @contact.email deric.cain@gmail.com
+// @BasePath /v1
 func main() {
-	db := common.Init()
+	db := DbInit()
 	defer db.Close()
 
-	migrate()
+	migrate(db)
+
+	if env != "local" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
 	r := gin.Default()
 
-	v1 := r.Group("/api")
-	auth.Routes(v1.Group("/auth"))
-	users.Routes(v1.Group("/users"))
+	r.Use(cors.Default())
+
+	// Setup Sentry logging
+	r.Use(sentry.Recovery(raven.DefaultClient, false))
+
+	// Wrap all routes in v1/ URL
+	v1 := r.Group("/v1")
+
+	AuthRoutes(v1.Group("/auth"))
+	UserRoutes(v1.Group("/users"))
+	UnitRoutes(v1.Group("/units"))
+	CoreRoutes(v1.Group("/core"))
+	MailingListRoutes(v1.Group("/mailing-list"))
+
+	// Setup Swagger docs
+	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run(getPort())
 }

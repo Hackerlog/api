@@ -1,0 +1,390 @@
+basePath: /v1
+definitions:
+  main.Auth:
+    properties:
+      created_at:
+        type: string
+      expires_at:
+        type: integer
+      id:
+        type: integer
+      token:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/main.User'
+        type: object
+      user_id:
+        type: integer
+    type: object
+  main.AvailableResponse:
+    properties:
+      is_available:
+        type: boolean
+    type: object
+  main.GenericResponse:
+    properties:
+      error:
+        type: string
+      success:
+        type: boolean
+    type: object
+  main.Unit:
+    properties:
+      created_at:
+        type: string
+      editor_type:
+        type: string
+      file_name:
+        type: string
+      id:
+        type: integer
+      loc_deleted:
+        type: integer
+      loc_written:
+        type: integer
+      os:
+        type: string
+      project_name:
+        type: string
+      started_at:
+        type: string
+      stopped_at:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  main.User:
+    properties:
+      created_at:
+        type: string
+      editor_token:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      units:
+        items:
+          $ref: '#/definitions/main.Unit'
+        type: array
+      updated_at:
+        type: string
+      username:
+        type: string
+    required:
+    - last_name
+    - username
+    - email
+    - first_name
+    type: object
+  main.VersionResponse:
+    properties:
+      download:
+        example: https://github.com/Hackerlog/core/releases/download/v0.5/core_0.5_windows_amd64.zip
+        type: string
+      latest:
+        example: false
+        type: boolean
+    type: object
+info:
+  contact:
+    email: deric.cain@gmail.com
+    name: Deric Cain
+  description: This is the Hackerlog API
+  license: {}
+  title: Hackerlog API
+  version: v0.1
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns a JWT on successful login
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Auth'
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Authenticates a user
+      tags:
+      - auth
+  /auth/password-reset:
+    post:
+      consumes:
+      - application/json
+      description: Sends an email to the user with a link to reset their password
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.GenericResponse'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Starts a password reset
+      tags:
+      - auth
+  /auth/reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Allows the user to reset their password with the submitted password
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.GenericResponse'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not found
+          schema:
+            type: string
+      summary: Resets a user's password
+      tags:
+      - auth
+  /core/version:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint takes a few parameters and with those parameters,
+        it looks to see if
+      parameters:
+      - description: X-Hackerlog-EditorToken
+        in: header
+        name: X-Hackerlog-EditorToken
+        required: true
+        type: string
+      - description: Current core version in client
+        in: query
+        name: currentVersion
+        required: true
+        type: string
+      - description: The client OS
+        in: query
+        name: os
+        required: true
+        type: string
+      - description: The client architecture
+        in: query
+        name: arch
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.VersionResponse'
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Returns a link of the latest version of the Core app
+      tags:
+      - core
+  /mailing-list:
+    post:
+      consumes:
+      - application/json
+      description: This adds a user to the mailing list
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.GenericResponse'
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Adds a user to the mailing list
+      tags:
+      - mailing-list
+  /units:
+    get:
+      consumes:
+      - application/json
+      description: This gets all of the units of work for a specific user. The user
+        is identified by the
+      parameters:
+      - description: X-Hackerlog-EditorToken
+        in: header
+        name: X-Hackerlog-EditorToken
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.Unit'
+            type: array
+      summary: Gets units of work for a user
+      tags:
+      - units
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Finds a user given their editor token as a path param
+      parameters:
+      - description: User's Editor Token
+        in: body
+        name: editor
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.User'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Gets a user by their editor token
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Creates a user with the body params that are passed in
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.User'
+            type: object
+        "401":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Creates/Registers a user
+      tags:
+      - users
+  /users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Finds a user given their ID as a path param
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.User'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Gets a user by their ID
+      tags:
+      - users
+  /users/email:
+    get:
+      consumes:
+      - application/json
+      description: Checks if an email is available and responds as such
+      parameters:
+      - description: email search using q as key
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.AvailableResponse'
+            type: object
+        "401":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Checks if an email is available
+      tags:
+      - users
+  /users/username:
+    get:
+      consumes:
+      - application/json
+      description: Checks if a username is available and responds as such
+      parameters:
+      - description: Username search using q as key
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.AvailableResponse'
+            type: object
+        "401":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Checks if a username is available
+      tags:
+      - users
+swagger: "2.0"

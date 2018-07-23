@@ -1,51 +1,27 @@
 @host = http://localhost:8000
-@apiPrefix = api
+@apiPrefix = v1
 
-GET {{host}}/{{apiPrefix}}/posts
-
-###
-
-GET {{host}}/{{apiPrefix}}/posts/7
-
-###
-
-POST {{host}}/{{apiPrefix}}/posts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ilx1MDAwMyIsImVtYWlsIjoiZGVyaWMuY2FpbjJAZ21haWwuY29tIiwiZXhwIjoxNTMwNDg5NDc4LCJpc3MiOiJoYWNrZXJsb2cuaW8ifQ.n-vHBRrnL8i8OW5FhhPenGO2WXZu4KBnUeZhk78vi_g
+POST {{host}}/{{apiPrefix}}/units
+X-Hackerlog-EditorToken: c918791b-13b8-46d0-ad8f-2b76fbc03ca8
 
 {
-  "title": "Something a little different",
-  "body": "This is the best body ever this is too and that is the truth",
-  "excerpt": "This is a little teaser..."
+  "editor_type": "vscode",
+  "project_name": "web-consumer-app",
+  "file_name": "app.js",
+  "loc_written": "{{$randomInt 20 400}}",
+  "loc_deleted": "{{$randomInt 3 30}}",
+  "computer_type": "macbook pro",
+  "os": "osx",
+  "started_at": "{{$timestamp -52 m}}",
+  "stopped_at": "{{$timestamp}}"
 }
-
-###
-
-PUT {{host}}/{{apiPrefix}}/posts/2
-
-{
-  "title": "The baby was over the hype of it all",
-  "body": "Lorem ipsum dolor sit amet consectetur adipiscing elit imperdiet erat tempus dui",
-  "excerpt": "Lorem ipsum dolor"
-}
-
-###
-
-DELETE {{host}}/{{apiPrefix}}/posts/1
-
-###
-
-GET {{host}}/{{apiPrefix}}/users
-
-###
-
-GET {{host}}/{{apiPrefix}}/users/7
 
 ###
 
 POST {{host}}/{{apiPrefix}}/users
 
 {
-  "email": "deric.cain2@gmail.com",
+  "email": "deric.cain1@gmail.com",
   "name": "Deric Cain",
   "password": "password"
 }
@@ -62,21 +38,54 @@ PUT {{host}}/{{apiPrefix}}/users/2
 
 ###
 
-DELETE {{host}}/{{apiPrefix}}/users/1
-
-###
-
 POST {{host}}/{{apiPrefix}}/auth/login
 
 {
-  "email": "deric.cain2@gmail.com",
+  "email": "deric.cain@gmail.com",
+  "password": "password"
+}
+
+
+###
+
+GET {{host}}/{{apiPrefix}}/core/version?currentVersion=v0.3&os=darwin
+
+###
+
+GET {{host}}/{{apiPrefix}}/core/version?currentVersion=v0.3&os=windows&arch=amd64
+
+###
+
+GET {{host}}/{{apiPrefix}}/core/version?currentVersion=v0.4&os=windows
+
+
+###
+POST {{host}}/{{apiPrefix}}/mailing-list
+Content-Type: "application/json"
+
+{
+  "email": "deric.cain@gmail.com"
+}
+
+###
+POST {{host}}/{{apiPrefix}}/auth/password-reset
+Content-Type: "application/json"
+
+{
+  "email": "deric.cain@gmail.com"
+}
+
+###
+POST {{host}}/{{apiPrefix}}/auth/reset-password
+Content-Type: "application/json"
+
+{
+  "email": "deric.cain@gmail.com",
+  "token": "e17a1931-ba5d-4b18-9d6b-d29c4083e622",
   "password": "password"
 }
 
 ###
-
-POST {{host}}/{{apiPrefix}}/api/does-not-exists
-
-{
-  "nothing": true
-}
+DELETE {{host}}/{{apiPrefix}}/auth/purge-resets
+Content-Type: "application/json"
+X-Hackerlog-PurgeToken: punt-smek-tim-pank-pub-drect-hoss-vuk
