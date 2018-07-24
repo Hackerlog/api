@@ -44,18 +44,23 @@ func AuthRoutes(r *gin.RouterGroup) {
 func checkAuth(c *gin.Context) {
 	var user User
 	var rUser User
+	var res GenericResponse
+	res.Success = false
+
 	db := GetDb()
 
 	c.ShouldBindJSON(&rUser)
 
 	if err := db.Where("email = ?", rUser.Email).First(&user).Error; err != nil {
 		log.Debug("No user found")
-		c.AbortWithError(http.StatusNotFound, err)
+		res.Error = "We cannot find a user with those credentials"
+		c.JSON(http.StatusNotFound, res)
 	} else {
 		// check password here
 		if authed := CheckPassword(user.Password, rUser.Password); authed != true {
 			log.Debug("Password does not match")
-			c.AbortWithStatus(http.StatusUnauthorized)
+			res.Error = "We cannot find a user with those credentials"
+			c.JSON(http.StatusNotFound, res)
 		} else {
 			var userToken Auth
 			if findTokenErr := db.Model(&user).Related(&userToken).Error; findTokenErr == nil {
