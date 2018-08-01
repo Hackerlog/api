@@ -6,45 +6,29 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
-var testEditorToken = "test"
-
-func setupRouter() *gin.Engine {
-	r := gin.Default()
-	v1 := r.Group("v1")
-	CoreRoutes(v1.Group("/core"))
-	return r
-}
-
-func setupDb() {
-	db := InitTestDB()
-	db.AutoMigrate(&User{})
-
-	var user User
-	user.Email = "test@test.com"
-	user.EditorToken = testEditorToken
-	user.FirstName = "Test"
-	user.LastName = "Dummy"
-	user.Password = "password"
-
-	db.Create(&user)
-}
-
-func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
+func vReq(r http.Handler, method, path string) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(method, path, nil)
-	req.Header.Add(xHeader, testEditorToken)
+	req.Header.Add(xHeader, TestEditorToken)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	return w
 }
 
 func TestIsLatestVersionRoute(t *testing.T) {
-	setupDb()
-	r := setupRouter()
-	w := performRequest(r, "GET", "/v1/core/version?currentVersion=v0.04&os=darwin")
+	var user User
+	user.Email = "test@test.com"
+	user.EditorToken = TestEditorToken
+	user.FirstName = "Test"
+	user.LastName = "Dummy"
+	user.Password = "password"
+
+	SetupTestDb(&user)
+
+	r := SetupTestRouter()
+	w := vReq(r, "GET", "/v1/core/version?currentVersion=v0.04&os=darwin")
 	assert.Equal(t, http.StatusOK, w.Code)
 }
 
