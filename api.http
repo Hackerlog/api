@@ -21,9 +21,20 @@ X-Hackerlog-EditorToken: c918791b-13b8-46d0-ad8f-2b76fbc03ca8
 POST {{host}}/{{apiPrefix}}/users
 
 {
-  "email": "deric.cain1@gmail.com",
-  "name": "Deric Cain",
-  "password": "password"
+  "email": "test@test.com",
+  "first_name": "Test",
+  "last_name": "Dummy",
+  "password": "password",
+  "username": "test"
+}
+
+###
+
+POST {{host}}/{{apiPrefix}}/auth/login
+
+{
+  "email": "test@test.com",
+  "password": "password123"
 }
 
 ###
@@ -35,16 +46,6 @@ PUT {{host}}/{{apiPrefix}}/users/2
   "body": "Lorem ipsum dolor sit amet consectetur adipiscing elit imperdiet erat tempus dui",
   "excerpt": "Lorem ipsum dolor"
 }
-
-###
-
-POST {{host}}/{{apiPrefix}}/auth/login
-
-{
-  "email": "deric.cain@gmail.com",
-  "password": "password"
-}
-
 
 ###
 

@@ -32,6 +32,11 @@ func AuthRoutes(r *gin.RouterGroup) {
 	r.DELETE("/purge-resets", purgeResets)
 }
 
+type AuthRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 // @Summary Authenticates a user
 // @Description Authenticates a user and returns a JWT on successful login
 // @Tags auth
@@ -43,21 +48,22 @@ func AuthRoutes(r *gin.RouterGroup) {
 // @Router /auth/login [post]
 func checkAuth(c *gin.Context) {
 	var user User
-	var rUser User
+	var req AuthRequest
 	var res GenericResponse
 	res.Success = false
 
 	db := GetDb()
 
-	c.ShouldBindJSON(&rUser)
+	c.ShouldBindJSON(&req)
 
-	if err := db.Where("email = ?", rUser.Email).First(&user).Error; err != nil {
+	if err := db.Where("email = ?", req.Email).First(&user).Error; err != nil {
 		log.Debug("No user found")
 		res.Error = "We cannot find a user with those credentials"
 		c.JSON(http.StatusNotFound, res)
 	} else {
 		// check password here
-		if authed := CheckPassword(user.Password, rUser.Password); authed != true {
+		isAuth := CheckPassword(user.Password, req.Password)
+		if !isAuth {
 			log.Debug("Password does not match")
 			res.Error = "We cannot find a user with those credentials"
 			c.JSON(http.StatusNotFound, res)

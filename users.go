@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pborman/uuid"
+	log "github.com/sirupsen/logrus"
 )
 
 // User This is the user model that will hold all of the users
@@ -15,7 +16,7 @@ type User struct {
 	Email              string     `json:"email" gorm:"type:varchar(100);unique_index" binding:"required"`
 	FirstName          string     `json:"first_name" binding:"required"`
 	LastName           string     `json:"last_name" binding:"required"`
-	Password           string     `json:"-" binding:"required"`
+	Password           string     `json:"password" binding:"required"`
 	EditorToken        string     `json:"editor_token" gorm:"index"`
 	Username           string     `json:"username" gorm:"type:varchar(100);unique_index" binding:"required"`
 	PasswordResetToken string     `json:"-"`
@@ -27,6 +28,7 @@ type User struct {
 
 // BeforeCreate We want to hash the users password
 func (u *User) BeforeCreate() (err error) {
+	log.Info(u)
 	hashedPassword, err := HashPassword(u.Password)
 
 	if err != nil {
