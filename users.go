@@ -18,6 +18,7 @@ type User struct {
 	Password           string     `json:"password" binding:"required"`
 	EditorToken        string     `json:"editor_token" gorm:"index"`
 	Username           string     `json:"username" gorm:"type:varchar(100);unique_index" binding:"required"`
+	ProfileImage       string     `json:"profile_image"`
 	PasswordResetToken string     `json:"-"`
 	Units              []Unit     `json:"units"`
 	CreatedAt          time.Time  `json:"created_at"`
@@ -50,6 +51,7 @@ func UserRoutes(r *gin.RouterGroup) {
 	r.GET("/email", emailIsAvailable)
 	r.GET("", findUserByEditorToken)
 	r.POST("", createUser)
+	r.PATCH("/:id", addProfileImage)
 }
 
 // @Summary Gets a user by their ID
@@ -183,4 +185,37 @@ func emailIsAvailable(c *gin.Context) {
 		res.IsAvailable = false
 		c.JSON(http.StatusOK, res)
 	}
+}
+
+// @Summary Add Profile Image
+// @Description Adds a profile image to a user
+// @Tags users
+// @Accept json
+// @Produce json
+// @param id path string true "The ID of the user"
+// @param image_url body string true "The URL of the profile image"
+// @Success 200 {object} main.GenericResponse
+// @Failure 404 {string} string "Not Found"
+// @Router /users/{id}} [patch]
+func addProfileImage(c *gin.Context) {
+	var req User
+	var res GenericResponse
+	var user User
+
+	c.ShouldBindJSON(&req)
+
+	db := GetDb()
+	id := c.Param("id")
+
+	if err := db.Where("id = ?", id).First(&user).Error; err != nil {
+		res.Error = "Could not find a user with that ID"
+		c.JSON(http.StatusNotFound, res)
+		return
+	}
+
+	user.ProfileImage = req.ProfileImage
+	db.Save(&user)
+
+	res.Success = true
+	c.JSON(http.StatusOK, res)
 }

@@ -90,3 +90,11 @@ Content-Type: "application/json"
 DELETE {{host}}/{{apiPrefix}}/auth/purge-resets
 Content-Type: "application/json"
 X-Hackerlog-PurgeToken: punt-smek-tim-pank-pub-drect-hoss-vuk
+
+###
+PATCH {{host}}/{{apiPrefix}}/users/1
+Content-Type: "application/json"
+
+{
+  "profile_image": "https://res.cloudinary.com/hhz4dqh1x/image/upload/v1533148995/samples/people/smiling-man.jpg"
+}

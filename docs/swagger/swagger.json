@@ -446,6 +446,54 @@
                     }
                 }
             }
+        },
+        "/users/{id}}": {
+            "patch": {
+                "description": "Adds a profile image to a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Add Profile Image",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the user",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "The URL of the profile image",
+                        "name": "image_url",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/main.GenericResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -539,11 +587,11 @@
         "main.User": {
             "type": "object",
             "required": [
-                "email",
-                "password",
-                "first_name",
                 "last_name",
-                "username"
+                "username",
+                "email",
+                "first_name",
+                "password"
             ],
             "properties": {
                 "created_at": {
@@ -565,6 +613,9 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "profile_image": {
                     "type": "string"
                 },
                 "units": {
