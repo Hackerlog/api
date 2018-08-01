@@ -4,9 +4,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/jinzhu/gorm"
-
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 )
 
 // TestEditorToken Used for testing
@@ -37,8 +36,7 @@ func PerformTestRequest(h http.Handler, r *http.Request) *httptest.ResponseRecor
 func SetupTestDb(data interface{}) *gorm.DB {
 	db := InitTestDB()
 	db.AutoMigrate(&User{})
-
+	db.AutoMigrate(&Auth{})
 	db.Create(data)
-
 	return db
 }

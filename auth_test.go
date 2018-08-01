@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,23 +17,10 @@ var aUser = User{
 	Username:  "test",
 }
 
-func aReq(r http.Handler, method, path string) *httptest.ResponseRecorder {
-	data, _ := json.Marshal(struct {
-		Password string `json:"password"`
-		Email    string `json:"email"`
-	}{
-		Password: "testing",
-		Email:    "test@test.com",
-	})
-	req, _ := http.NewRequest(method, path, bytes.NewBuffer(data))
-	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	return w
-}
-
 func TestAuthShouldLogUserIn(t *testing.T) {
-	u := &aUser
-	SetupTestDb(u)
+	u := aUser
+	db := SetupTestDb(&u)
+	defer db.Close()
 
 	data, _ := json.Marshal(struct {
 		Password string `json:"password"`
@@ -52,9 +38,10 @@ func TestAuthShouldLogUserIn(t *testing.T) {
 
 func TestAuthShouldCreatePasswordResetToken(t *testing.T) {
 	var assertUser User
-	u := &aUser
+	u := aUser
 
-	db := SetupTestDb(u)
+	db := SetupTestDb(&u)
+	defer db.Close()
 
 	data, _ := json.Marshal(struct {
 		Email string `json:"email"`

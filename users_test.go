@@ -18,7 +18,8 @@ var uUser = User{
 }
 
 func TestAuthShouldCreateUser(t *testing.T) {
-	SetupTestDb(&uUser)
+	u := uUser
+	SetupTestDb(&u)
 
 	data, _ := json.Marshal(User{
 		Email:     "new@test.com",

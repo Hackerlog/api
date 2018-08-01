@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pborman/uuid"
-	log "github.com/sirupsen/logrus"
 )
 
 // User This is the user model that will hold all of the users
@@ -28,7 +27,6 @@ type User struct {
 
 // BeforeCreate We want to hash the users password
 func (u *User) BeforeCreate() (err error) {
-	log.Info(u)
 	hashedPassword, err := HashPassword(u.Password)
 
 	if err != nil {
@@ -98,9 +96,11 @@ func findUserByEditorToken(c *gin.Context) {
 
 // @Summary Creates/Registers a user
 // @Description Creates a user with the body params that are passed in
+// @OperationId createUser
 // @Tags users
 // @Accept  json
 // @Produce  json
+// @Param user body main.User true "User object: first_name, last_name, email, password, username"
 // @Success 201 {object} main.User
 // @Failure 401 {string} string "Bad Request"
 // @Router /users [post]

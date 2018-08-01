@@ -10,10 +10,7 @@ import (
 )
 
 // DB The database export
-var (
-	DB     *gorm.DB
-	TempDb = "../test.sqlite"
-)
+var DB *gorm.DB
 
 // DbInit Connects to the database
 func DbInit() *gorm.DB {
@@ -37,10 +34,7 @@ func GetDb() *gorm.DB {
 
 // InitTestDB This function will create a temporarily database for running testing cases
 func InitTestDB() *gorm.DB {
-	if _, fErr := os.Create(TempDb); fErr != nil {
-		log.Error("The temp database failed to create", fErr)
-	}
-	testDb, err := gorm.Open("sqlite3", TempDb)
+	testDb, err := gorm.Open("sqlite3", ":memory:")
 	if err != nil {
 		log.Error(err)
 	}
@@ -55,8 +49,6 @@ func InitTestDB() *gorm.DB {
 }
 
 // CloseTestDB Delete the database after running testing cases.
-func CloseTestDB(testDb *gorm.DB) error {
+func CloseTestDB(testDb *gorm.DB) {
 	testDb.Close()
-	err := os.Remove(TempDb)
-	return err
 }

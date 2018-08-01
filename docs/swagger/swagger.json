@@ -303,6 +303,18 @@
                     "users"
                 ],
                 "summary": "Creates/Registers a user",
+                "parameters": [
+                    {
+                        "description": "User object: first_name, last_name, email, password, username",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/main.User"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Created",
@@ -527,10 +539,11 @@
         "main.User": {
             "type": "object",
             "required": [
-                "first_name",
-                "username",
                 "email",
-                "last_name"
+                "password",
+                "first_name",
+                "last_name",
+                "username"
             ],
             "properties": {
                 "created_at": {
@@ -549,6 +562,9 @@
                     "type": "integer"
                 },
                 "last_name": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 },
                 "units": {
