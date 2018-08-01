@@ -140,8 +140,12 @@ func passwordReset(c *gin.Context) {
 		token := uniuri.NewLen(120)
 		user.PasswordResetToken = token
 		db.Save(&user)
-		if _, err = sendResetEmail(user.Email, token); err != nil {
-			c.AbortWithError(http.StatusBadRequest, err)
+		env := os.Getenv("APP_ENV")
+		// Don't want to send an email when running CI
+		if env != "ci" {
+			if _, err = sendResetEmail(user.Email, token); err != nil {
+				c.AbortWithError(http.StatusBadRequest, err)
+			}
 		}
 		c.JSON(http.StatusOK, res)
 	}

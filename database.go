@@ -45,7 +45,11 @@ func InitTestDB() *gorm.DB {
 		log.Error(err)
 	}
 	testDb.DB().SetMaxIdleConns(3)
-	testDb.LogMode(true)
+
+	if os.Getenv("APP_ENV") == "local" {
+		testDb.LogMode(true)
+	}
+
 	DB = testDb
 	return DB
 }

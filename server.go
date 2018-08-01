@@ -55,8 +55,7 @@ func init() {
 	raven.SetDSN(os.Getenv("SENTRY_DSN"))
 	raven.SetEnvironment(env)
 
-	if env == "production" {
-		log.Info("Env is in production mode")
+	if env != "local" {
 		log.SetLevel(log.ErrorLevel)
 	} else {
 		log.SetLevel(log.DebugLevel)
