@@ -39,6 +39,7 @@ type AuthRequest struct {
 
 // @Summary Authenticates a user
 // @Description Authenticates a user and returns a JWT on successful login
+// @ID login
 // @Tags auth
 // @Accept  json
 // @Produce  json
@@ -117,6 +118,7 @@ type ResetRequest struct {
 
 // @Summary Starts a password reset
 // @Description Sends an email to the user with a link to reset their password
+// @ID passwordReset
 // @Tags auth
 // @Accept  json
 // @Produce  json
@@ -183,6 +185,7 @@ type ResetPostRequest struct {
 
 // @Summary Resets a user's password
 // @Description Allows the user to reset their password with the submitted password
+// @ID resetPassword
 // @Tags auth
 // @Accept  json
 // @Produce  json

@@ -29,7 +29,7 @@ sdk:
 		-i docs/swagger/swagger.json \
 		-l typescript-fetch \
 		-t sdk-config/template \
-		-o ~/Code/web/src/services/api \
+		-o ~/Code/web/src/services/api/src \
 		-c sdk-config/config.json \
 		--remove-operation-id-prefix \
 		--git-repo-id web-sdk \

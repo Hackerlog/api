@@ -56,6 +56,7 @@ func UserRoutes(r *gin.RouterGroup) {
 
 // @Summary Gets a user by their ID
 // @Description Finds a user given their ID as a path param
+// @ID findUser
 // @Tags users
 // @Accept  json
 // @Produce  json
@@ -77,6 +78,7 @@ func findUser(c *gin.Context) {
 
 // @Summary Gets a user by their editor token
 // @Description Finds a user given their editor token as a path param
+// @ID fundUserByEditorToken
 // @Tags users
 // @Accept  json
 // @Produce  json
@@ -98,6 +100,7 @@ func findUserByEditorToken(c *gin.Context) {
 
 // @Summary Creates/Registers a user
 // @Description Creates a user with the body params that are passed in
+// @ID createUser
 // @OperationId createUser
 // @Tags users
 // @Accept  json
@@ -139,6 +142,7 @@ type AvailableResponse struct {
 
 // @Summary Checks if a username is available
 // @Description Checks if a username is available and responds as such
+// @ID isUsernameAvailable
 // @Tags users
 // @Accept  json
 // @Produce  json
@@ -164,6 +168,7 @@ func usernameIsAvailable(c *gin.Context) {
 
 // @Summary Checks if an email is available
 // @Description Checks if an email is available and responds as such
+// @ID isEmailAvailable
 // @Tags users
 // @Accept  json
 // @Produce  json
@@ -189,6 +194,7 @@ func emailIsAvailable(c *gin.Context) {
 
 // @Summary Add Profile Image
 // @Description Adds a profile image to a user
+// @ID addProfileImage
 // @Tags users
 // @Accept json
 // @Produce json

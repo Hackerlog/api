@@ -25,6 +25,7 @@
                     "auth"
                 ],
                 "summary": "Authenticates a user",
+                "operationId": "login",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -61,6 +62,7 @@
                     "auth"
                 ],
                 "summary": "Starts a password reset",
+                "operationId": "passwordReset",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -91,6 +93,7 @@
                     "auth"
                 ],
                 "summary": "Resets a user's password",
+                "operationId": "resetPassword",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -264,6 +267,7 @@
                     "users"
                 ],
                 "summary": "Gets a user by their editor token",
+                "operationId": "fundUserByEditorToken",
                 "parameters": [
                     {
                         "description": "User's Editor Token",
@@ -303,6 +307,7 @@
                     "users"
                 ],
                 "summary": "Creates/Registers a user",
+                "operationId": "createUser",
                 "parameters": [
                     {
                         "description": "User object: first_name, last_name, email, password, username",
@@ -345,6 +350,7 @@
                     "users"
                 ],
                 "summary": "Checks if an email is available",
+                "operationId": "isEmailAvailable",
                 "parameters": [
                     {
                         "type": "string",
@@ -383,6 +389,7 @@
                     "users"
                 ],
                 "summary": "Checks if a username is available",
+                "operationId": "isUsernameAvailable",
                 "parameters": [
                     {
                         "type": "string",
@@ -421,6 +428,7 @@
                     "users"
                 ],
                 "summary": "Gets a user by their ID",
+                "operationId": "findUser",
                 "parameters": [
                     {
                         "type": "integer",
@@ -460,6 +468,7 @@
                     "users"
                 ],
                 "summary": "Add Profile Image",
+                "operationId": "addProfileImage",
                 "parameters": [
                     {
                         "type": "string",
@@ -587,10 +596,10 @@
         "main.User": {
             "type": "object",
             "required": [
-                "last_name",
-                "username",
                 "email",
                 "first_name",
+                "username",
+                "last_name",
                 "password"
             ],
             "properties": {

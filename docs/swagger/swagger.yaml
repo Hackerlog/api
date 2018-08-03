@@ -84,10 +84,10 @@ definitions:
       username:
         type: string
     required:
-    - last_name
-    - username
     - email
     - first_name
+    - username
+    - last_name
     - password
     type: object
   main.VersionResponse:
@@ -113,6 +113,7 @@ paths:
       consumes:
       - application/json
       description: Authenticates a user and returns a JWT on successful login
+      operationId: login
       produces:
       - application/json
       responses:
@@ -137,6 +138,7 @@ paths:
       consumes:
       - application/json
       description: Sends an email to the user with a link to reset their password
+      operationId: passwordReset
       produces:
       - application/json
       responses:
@@ -157,6 +159,7 @@ paths:
       consumes:
       - application/json
       description: Allows the user to reset their password with the submitted password
+      operationId: resetPassword
       produces:
       - application/json
       responses:
@@ -275,6 +278,7 @@ paths:
       consumes:
       - application/json
       description: Finds a user given their editor token as a path param
+      operationId: fundUserByEditorToken
       parameters:
       - description: User's Editor Token
         in: body
@@ -301,6 +305,7 @@ paths:
       consumes:
       - application/json
       description: Creates a user with the body params that are passed in
+      operationId: createUser
       parameters:
       - description: 'User object: first_name, last_name, email, password, username'
         in: body
@@ -329,6 +334,7 @@ paths:
       consumes:
       - application/json
       description: Finds a user given their ID as a path param
+      operationId: findUser
       parameters:
       - description: User ID
         in: path
@@ -355,6 +361,7 @@ paths:
       consumes:
       - application/json
       description: Adds a profile image to a user
+      operationId: addProfileImage
       parameters:
       - description: The ID of the user
         in: path
@@ -387,6 +394,7 @@ paths:
       consumes:
       - application/json
       description: Checks if an email is available and responds as such
+      operationId: isEmailAvailable
       parameters:
       - description: email search using q as key
         in: query
@@ -412,6 +420,7 @@ paths:
       consumes:
       - application/json
       description: Checks if a username is available and responds as such
+      operationId: isUsernameAvailable
       parameters:
       - description: Username search using q as key
         in: query
