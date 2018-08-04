@@ -30,6 +30,13 @@ definitions:
       success:
         type: boolean
     type: object
+  main.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
   main.Unit:
     properties:
       created_at:
@@ -86,9 +93,9 @@ definitions:
     required:
     - email
     - first_name
-    - username
     - last_name
     - password
+    - username
     type: object
   main.VersionResponse:
     properties:
@@ -113,7 +120,15 @@ paths:
       consumes:
       - application/json
       description: Authenticates a user and returns a JWT on successful login
-      operationId: login
+      operationId: authenticate
+      parameters:
+      - description: email, password
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/main.LoginRequest'
+          type: object
       produces:
       - application/json
       responses:
@@ -230,6 +245,14 @@ paths:
       consumes:
       - application/json
       description: This adds a user to the mailing list
+      operationId: addUser
+      parameters:
+      - description: Email address
+        in: body
+        name: email
+        required: true
+        schema:
+          type: object
       produces:
       - application/json
       responses:

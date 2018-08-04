@@ -21,9 +21,11 @@ type MailingListRequest struct {
 
 // @Summary Adds a user to the mailing list
 // @Description This adds a user to the mailing list
+// @ID addUser
 // @Tags mailing-list
 // @Accept  json
 // @Produce  json
+// @Param email body string true "Email address"
 // @Success 201 {object} main.GenericResponse
 // @Failure 400 {string} string "Bad request"
 // @Failure 401 {string} string "Unauthorized"

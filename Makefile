@@ -35,3 +35,4 @@ sdk:
 		--git-repo-id web-sdk \
 		--git-user-id hackerlog \
 		--additional-properties modelPropertyNaming=original
+s: swagger sdk

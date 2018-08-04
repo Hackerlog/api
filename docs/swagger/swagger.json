@@ -25,7 +25,19 @@
                     "auth"
                 ],
                 "summary": "Authenticates a user",
-                "operationId": "login",
+                "operationId": "authenticate",
+                "parameters": [
+                    {
+                        "description": "email, password",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/main.LoginRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -196,6 +208,18 @@
                     "mailing-list"
                 ],
                 "summary": "Adds a user to the mailing list",
+                "operationId": "addUser",
+                "parameters": [
+                    {
+                        "description": "Email address",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Created",
@@ -552,6 +576,17 @@
                 }
             }
         },
+        "main.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "main.Unit": {
             "type": "object",
             "properties": {
@@ -598,9 +633,9 @@
             "required": [
                 "email",
                 "first_name",
-                "username",
                 "last_name",
-                "password"
+                "password",
+                "username"
             ],
             "properties": {
                 "created_at": {

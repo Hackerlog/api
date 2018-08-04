@@ -26,30 +26,32 @@ type Auth struct {
 
 // AuthRoutes Register the routes
 func AuthRoutes(r *gin.RouterGroup) {
-	r.POST("/login", checkAuth)
+	r.POST("/login", login)
 	r.POST("/password-reset", passwordReset)
 	r.POST("/reset-password", resetPassword)
 	r.DELETE("/purge-resets", purgeResets)
 }
 
-type AuthRequest struct {
+// LoginRequest The request for login
+type LoginRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
 // @Summary Authenticates a user
 // @Description Authenticates a user and returns a JWT on successful login
-// @ID login
+// @ID authenticate
 // @Tags auth
 // @Accept  json
 // @Produce  json
+// @param login body main.LoginRequest true "email, password"
 // @Success 200 {object} main.Auth
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 404 {string} string "Not Found"
 // @Router /auth/login [post]
-func checkAuth(c *gin.Context) {
+func login(c *gin.Context) {
 	var user User
-	var req AuthRequest
+	var req LoginRequest
 	var res GenericResponse
 	res.Success = false
 
